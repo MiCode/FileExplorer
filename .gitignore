@@ -1,0 +1,10 @@
+# generated files
+bin/
+gen/
+
+# Local configuration file (sdk path, etc)
+proguard.cfg
+project.properties
+.settings/
+.classpath
+.project
