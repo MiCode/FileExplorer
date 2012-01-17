@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/dropdown_item_bg">
+
+    <LinearLayout
+        android:id="@+id/list_item"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:layout_marginLeft="10dip">
+
+        <ImageView
+            android:id="@+id/item_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="fitCenter"
+            android:gravity="center"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="5dip" />
+
+        <TextView
+            android:id="@+id/path_name"
+            android:layout_width="fill_parent"
+            android:layout_height="88px"
+            android:singleLine="true"
+            android:gravity="center_vertical"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    </LinearLayout>
+
+</LinearLayout>
