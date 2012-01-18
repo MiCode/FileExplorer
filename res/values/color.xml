@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<resources>
+    <color name="yellow">#FFF000</color>
+    <color name="gray">#A6A6A0</color>
+    <color name="orange">#ff9900</color>
+    <color name="deepcolor">#faaa5f</color>
+    <color name="shadowcolor">#333333</color>
+    <color name="naming">#ABABAB</color>
+    <color name="red">#FF0000</color>
+    <color name="background">#272727</color>
+    <color name="orange_yellow">#9b9ba0</color>
+
+    <drawable name="semi_black">#80000000</drawable>
+
+    <color name="remote_connect_text">#FFe78018</color>
+    <color name="remote_disconnect_text">#FF901821</color>
+
+</resources>

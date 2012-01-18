@@ -1,0 +1,10 @@
+
+<searchable xmlns:android="http://schemas.android.com/apk/res/android"
+    android:label="@string/search_title"
+    android:hint="@string/search_hint"
+    android:includeInGlobalSearch="true"
+
+    android:searchSuggestAuthority="media"
+    android:searchSuggestPath="external/otherfile/search"
+    android:searchSuggestIntentAction="android.intent.action.VIEW"
+/>
