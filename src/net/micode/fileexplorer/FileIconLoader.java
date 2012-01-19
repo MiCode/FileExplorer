@@ -19,9 +19,11 @@
 
 package net.micode.fileexplorer;
 
-import net.micode.fileexplorer.FileCategoryHelper.FileCategory;
+import java.lang.ref.SoftReference;
+import java.util.Iterator;
+import java.util.concurrent.ConcurrentHashMap;
 
-import android.content.ContentResolver;
+import net.micode.fileexplorer.FileCategoryHelper.FileCategory;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -29,19 +31,14 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Handler;
-import android.os.Handler.Callback;
 import android.os.HandlerThread;
 import android.os.Message;
-import android.os.RemoteException;
-import android.provider.MediaStore.Files.FileColumns;
+import android.os.Handler.Callback;
 import android.provider.MediaStore.Images;
 import android.provider.MediaStore.Video;
+import android.provider.MediaStore.Files.FileColumns;
 import android.util.Log;
 import android.widget.ImageView;
-
-import java.lang.ref.SoftReference;
-import java.util.Iterator;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Asynchronously loads file icons and thumbnail, mostly single-threaded.
@@ -439,13 +436,6 @@ public class FileIconLoader implements Callback {
 
             mMainThreadHandler.sendEmptyMessage(MESSAGE_ICON_LOADED);
             return true;
-        }
-
-        private Bitmap getBitmap(String path) {
-            BitmapFactory.Options opts = new BitmapFactory.Options();
-            BitmapFactory.decodeFile(path, opts);
-            opts.inSampleSize = Math.min(opts.outWidth / 48, opts.outHeight / 48);
-            return BitmapFactory.decodeFile(path, opts);
         }
 
         private static final int MICRO_KIND = 3;

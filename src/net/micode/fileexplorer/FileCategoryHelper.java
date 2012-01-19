@@ -130,16 +130,6 @@ public class FileCategoryHelper {
         public long size;
     }
 
-    private void setCategoryInfo(FileCategory fc, long count, long size) {
-        CategoryInfo info = mCategoryInfo.get(fc);
-        if (info == null) {
-            info = new CategoryInfo();
-            mCategoryInfo.put(fc, info);
-        }
-        info.count = count;
-        info.size = size;
-    }
-
     public static FileCategory getCategoryFromPath(String path) {
         int dotPosition = path.lastIndexOf('.');
         if (dotPosition == -1)
