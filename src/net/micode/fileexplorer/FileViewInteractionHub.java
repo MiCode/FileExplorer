@@ -577,11 +577,12 @@ public class FileViewInteractionHub implements IOperationProgressListener {
     }
 
     private void doOperationDelete(final ArrayList<FileInfo> selectedFileList) {
+        final ArrayList<FileInfo> selectedFiles = new ArrayList<FileInfo>(selectedFileList);
         Dialog dialog = new AlertDialog.Builder(mContext)
                 .setMessage(mContext.getString(R.string.operation_delete_confirm_message))
                 .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        if (mFileOperationHelper.Delete(selectedFileList)) {
+                        if (mFileOperationHelper.Delete(selectedFiles)) {
                             showProgress(mContext.getString(R.string.operation_deleting));
                         }
                         clearSelection();

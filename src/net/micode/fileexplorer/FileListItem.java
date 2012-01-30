@@ -176,6 +176,7 @@ public class FileListItem extends LinearLayout {
 
         @Override
         public void onDestroyActionMode(ActionMode mode) {
+            mFileViewInteractionHub.clearSelection();
             ((FileExplorerTabActivity) mContext).setActionMode(null);
         }
     }
