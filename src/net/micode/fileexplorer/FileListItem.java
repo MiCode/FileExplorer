@@ -96,6 +96,8 @@ public class FileListItem extends LinearLayout {
             if (actionMode == null) {
                 actionMode = startActionMode(new ModeCallback());
                 ((FileExplorerTabActivity) mContext).setActionMode(actionMode);
+            } else {
+                actionMode.invalidate();
             }
             if (mFileViewInteractionHub.onCheckItem(tag, v)) {
                 img.setImageResource(tag.Selected ? R.drawable.btn_check_on_holo_light
@@ -129,7 +131,9 @@ public class FileListItem extends LinearLayout {
 
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false;
+            mMenu.findItem(R.id.action_copy_path).setVisible(
+                    mFileViewInteractionHub.getSelectedFileList().size() == 1);
+            return true;
         }
 
         @Override
@@ -149,6 +153,10 @@ public class FileListItem extends LinearLayout {
                     break;
                 case R.id.action_send:
                     mFileViewInteractionHub.onOperationSend();
+                    mode.finish();
+                    break;
+                case R.id.action_copy_path:
+                    mFileViewInteractionHub.onOperationCopyPath();
                     mode.finish();
                     break;
                 case R.id.action_cancel:

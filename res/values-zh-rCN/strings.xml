@@ -13,6 +13,7 @@
     <string name="operation_favorite">收藏</string>
     <string name="operation_unfavorite">取消收藏</string>
     <string name="operation_copy">复制</string>
+    <string name="operation_copy_path">复制路径</string>
     <string name="operation_paste">粘贴</string>
     <string name="operation_move">剪切</string>
     <string name="operation_send">发送</string>

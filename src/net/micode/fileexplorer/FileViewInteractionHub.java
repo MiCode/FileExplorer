@@ -29,6 +29,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -415,6 +416,19 @@ public class FileViewInteractionHub implements IOperationProgressListener {
         refreshFileList();
     }
 
+    public void onOperationCopyPath() {
+        if (getSelectedFileList().size() == 1) {
+            copy(getSelectedFileList().get(0).filePath);
+        }
+        clearSelection();
+    }
+
+    private void copy(CharSequence text) {
+        ClipboardManager cm = (ClipboardManager) mContext.getSystemService(
+                Context.CLIPBOARD_SERVICE);
+        cm.setText(text);
+    }
+
     private void onOperationPaste() {
         if (mFileOperationHelper.Paste(mCurrentPath)) {
             showProgress(mContext.getString(R.string.operation_pasting));
@@ -648,6 +662,7 @@ public class FileViewInteractionHub implements IOperationProgressListener {
             }
 
             addMenuItem(menu, GlobalConsts.MENU_COPY, 0, R.string.operation_copy);
+            addMenuItem(menu, GlobalConsts.MENU_COPY_PATH, 0, R.string.operation_copy_path);
             // addMenuItem(menu, GlobalConsts.MENU_PASTE, 0,
             // R.string.operation_paste);
             addMenuItem(menu, GlobalConsts.MENU_MOVE, 0, R.string.operation_move);
@@ -770,6 +785,9 @@ public class FileViewInteractionHub implements IOperationProgressListener {
 
                 case GlobalConsts.MENU_COPY:
                     onOperationCopy();
+                    break;
+                case GlobalConsts.MENU_COPY_PATH:
+                    onOperationCopyPath();
                     break;
                 case GlobalConsts.MENU_PASTE:
                     onOperationPaste();

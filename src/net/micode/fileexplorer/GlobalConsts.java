@@ -37,6 +37,7 @@ public abstract class GlobalConsts {
     public static final int MENU_PASTE = 105;
     public static final int MENU_MOVE = 106;
     public static final int MENU_SHOWHIDE = 117;
+    public static final int MENU_COPY_PATH = 118;
 
     public static final int OPERATION_UP_LEVEL = 3;
 }

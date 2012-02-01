@@ -46,6 +46,7 @@
     <string name="operation_cancel">Cancel</string>
     <string name="operation_cancel_selectall">Deselect All</string>
     <string name="operation_copy">Copy</string>
+    <string name="operation_copy_path">Copy file path</string>
     <string name="operation_create_folder">New folder</string>
     <string name="operation_create_folder_message">Enter folder name</string>
     <string name="operation_delete">Delete</string>
