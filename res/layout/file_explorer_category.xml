@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/file_browse_frame" android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+
+    <!-- path -->
+    <LinearLayout android:id="@+id/navigation_bar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:background="@drawable/secondary_title_background"
+        android:visibility="gone"
+        android:paddingLeft="10dip"
+        android:paddingRight="10dip">
+        <LinearLayout android:layout_width="0dip"
+            android:layout_weight="1" android:layout_height="wrap_content"
+            android:gravity="center_vertical">
+            <LinearLayout android:id="@+id/current_path_pane"
+                android:background="@drawable/path_pane_bg"
+                android:layout_width="fill_parent" android:maxWidth="300dip"
+                android:gravity="center_vertical" android:layout_height="wrap_content">
+                <LinearLayout android:id="@+id/current_path_scroller"
+                    android:layout_width="0dip" android:layout_weight="1"
+                    android:layout_marginRight="5dip"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/current_path_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="start"
+                        android:paddingLeft="10dip"
+                        android:singleLine="true"
+                        style="?android:attr/textAppearanceMedium"/>
+                </LinearLayout>
+                <ImageView android:id="@+id/path_pane_arrow"
+                    android:src="@drawable/arrow_down"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical" />
+            </LinearLayout>
+        </LinearLayout>
+        <ImageView android:id="@+id/path_pane_up_level"
+            android:src="@drawable/path_up_level" android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:layout_gravity="center_vertical|right"
+            android:layout_marginLeft="5dip" />
+    </LinearLayout>
+    <!-- end path -->
+
+    <FrameLayout android:layout_width="fill_parent"
+        android:layout_height="0dip" android:layout_weight="1">
+        <ListView android:id="@+id/file_path_list"
+            android:visibility="gone"
+            android:headerDividersEnabled="true"
+            android:footerDividersEnabled="true"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+        <ListView android:id="@+id/favorite_list"
+            android:visibility="gone"
+            android:headerDividersEnabled="true"
+            android:footerDividersEnabled="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <LinearLayout android:id="@+id/empty_view"
+            android:orientation="vertical" android:layout_width="fill_parent"
+            android:layout_height="fill_parent" android:gravity="center"
+            android:visibility="gone">
+            <ImageView android:src="@drawable/empty_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView android:layout_width="wrap_content"
+                android:text="@string/no_file" android:layout_height="wrap_content"
+                android:textColor="#e2e2e2" android:textSize="27px"
+                android:singleLine="true" />
+        </LinearLayout>
+
+        <ScrollView android:id="@+id/dropdown_navigation"
+            android:overScrollMode="never" android:layout_width="fill_parent"
+            android:layout_height="wrap_content" android:background="@drawable/dropdown"
+            android:visibility="gone">
+            <LinearLayout android:id="@+id/dropdown_navigation_list"
+                android:orientation="vertical" android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+            </LinearLayout>
+        </ScrollView>
+
+        <LinearLayout android:id="@+id/sd_not_available_page"
+            android:orientation="vertical" android:layout_width="fill_parent"
+            android:layout_height="fill_parent" android:gravity="center"
+            android:visibility="gone">
+            <ImageView android:src="@drawable/sd_not_available"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="25px" />
+
+            <TextView android:text="@string/enable_sd_card"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content" android:textSize="22px"
+                android:gravity="center" />
+
+        </LinearLayout>
+        <LinearLayout android:id="@+id/category_page"
+            android:layout_width="fill_parent" android:layout_height="fill_parent"
+            android:orientation="vertical">
+
+            <LinearLayout android:id="@+id/category_buttons"
+                android:layout_width="fill_parent"
+                android:layout_height="0dip" android:layout_weight="1"
+                android:orientation="vertical">
+                <LinearLayout android:layout_width="fill_parent"
+                    android:layout_height="0dip" android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center">
+                    <LinearLayout android:id="@+id/category_music"
+                        style="@style/CategoryButtonStyle"
+                        android:background="@drawable/category_button_left">
+                        <ImageView android:src="@drawable/category_icon_music"
+                            style="@style/CategoryButtonIconStyle" />
+                        <TextView android:text="@string/category_music"
+                            style="@style/CategoryButtonTextStyle" />
+                        <TextView android:id="@+id/category_music_count"
+                            style="@style/CategoryButtonCountTextStyle" />
+                    </LinearLayout>
+                    <LinearLayout android:id="@+id/category_video"
+                        style="@style/CategoryButtonStyle"
+                        android:background="@drawable/category_button_middle">
+                        <ImageView android:src="@drawable/category_icon_video"
+                            style="@style/CategoryButtonIconStyle" />
+                        <TextView android:text="@string/category_video"
+                            style="@style/CategoryButtonTextStyle" />
+                        <TextView android:id="@+id/category_video_count"
+                            style="@style/CategoryButtonCountTextStyle" />
+                    </LinearLayout>
+                    <LinearLayout android:id="@+id/category_picture"
+                        style="@style/CategoryButtonStyle"
+                        android:background="@drawable/category_button_right">
+                        <ImageView android:src="@drawable/category_icon_picture"
+                            style="@style/CategoryButtonIconStyle" />
+                        <TextView android:text="@string/category_picture"
+                            style="@style/CategoryButtonTextStyle" />
+                        <TextView android:id="@+id/category_picture_count"
+                            style="@style/CategoryButtonCountTextStyle" />
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout android:layout_width="fill_parent"
+                    android:layout_height="0dip" android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center">
+                    <LinearLayout android:id="@+id/category_theme"
+                        style="@style/CategoryButtonStyle"
+                        android:background="@drawable/category_button_left">
+                        <ImageView android:src="@drawable/category_icon_theme"
+                            style="@style/CategoryButtonIconStyle" />
+                        <TextView android:text="@string/category_theme"
+                            style="@style/CategoryButtonTextStyle" />
+                        <TextView android:id="@+id/category_theme_count"
+                            style="@style/CategoryButtonCountTextStyle" />
+                    </LinearLayout>
+                    <LinearLayout android:id="@+id/category_document"
+                        style="@style/CategoryButtonStyle"
+                        android:background="@drawable/category_button_middle">
+                        <ImageView android:src="@drawable/category_icon_document"
+                            style="@style/CategoryButtonIconStyle" />
+                        <TextView android:text="@string/category_document"
+                            style="@style/CategoryButtonTextStyle" />
+                        <TextView android:id="@+id/category_document_count"
+                            style="@style/CategoryButtonCountTextStyle" />
+                    </LinearLayout>
+                    <LinearLayout android:id="@+id/category_zip"
+                        style="@style/CategoryButtonStyle"
+                        android:background="@drawable/category_button_right">
+                        <ImageView android:src="@drawable/category_icon_zip"
+                            style="@style/CategoryButtonIconStyle" />
+                        <TextView android:text="@string/category_zip"
+                            style="@style/CategoryButtonTextStyle" />
+                        <TextView android:id="@+id/category_zip_count"
+                            style="@style/CategoryButtonCountTextStyle" />
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout android:layout_width="fill_parent"
+                    android:layout_height="0dip" android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center">
+                    <LinearLayout android:id="@+id/category_apk"
+                        style="@style/CategoryButtonStyle"
+                        android:background="@drawable/category_button_left">
+                        <ImageView android:src="@drawable/category_icon_apk"
+                            style="@style/CategoryButtonIconStyle" />
+                        <TextView android:text="@string/category_apk"
+                            style="@style/CategoryButtonTextStyle" />
+                        <TextView android:id="@+id/category_apk_count"
+                            style="@style/CategoryButtonCountTextStyle" />
+                    </LinearLayout>
+                    <LinearLayout android:id="@+id/category_favorite"
+                        style="@style/CategoryButtonStyle"
+                        android:background="@drawable/category_button_middle">
+                        <ImageView android:src="@drawable/category_icon_favorite"
+                            style="@style/CategoryButtonIconStyle" />
+                        <TextView android:text="@string/category_favorite"
+                            style="@style/CategoryButtonTextStyle" />
+                        <TextView android:id="@+id/category_favorite_count"
+                            style="@style/CategoryButtonCountTextStyle" />
+                    </LinearLayout>
+                    <LinearLayout
+                        style="@style/CategoryButtonStyle"
+                        android:background="@drawable/category_button_right">
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- category information -->
+            <LinearLayout android:layout_width="fill_parent"
+                android:orientation="vertical" android:layout_height="wrap_content"
+                android:layout_gravity="bottom" android:background="@drawable/information_bg"
+                android:gravity="center_vertical" android:paddingTop="5dip">
+                <LinearLayout android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="5dip"
+                    android:layout_marginLeft="20px">
+
+                    <ImageView android:src="@drawable/sd_card_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:scaleType="fitCenter" android:gravity="center"
+                        android:layout_gravity="center" />
+
+                    <TextView android:text="@string/sd_card_name"
+                        style="@style/InformationTextStyle"
+                        android:layout_marginLeft="10dip" />
+                    <TextView android:id="@+id/sd_card_capacity"
+                        style="@style/InformationTextStyle" />
+
+                    <TextView android:text="@string/sd_card_available"
+                        style="@style/InformationTextStyle"
+                        android:layout_marginLeft="10dip" />
+                    <TextView android:id="@+id/sd_card_available"
+                        style="@style/InformationTextStyle" />
+                </LinearLayout>
+
+                <net.micode.fileexplorer.CategoryBar
+                    android:id="@+id/category_bar" android:layout_width="fill_parent"
+                    android:layout_height="35px" android:layout_gravity="center"
+                    android:layout_marginBottom="5dip">
+                </net.micode.fileexplorer.CategoryBar>
+
+                <LinearLayout android:layout_width="fill_parent"
+                    android:orientation="vertical"
+                    android:layout_height="wrap_content">
+                    <LinearLayout android:layout_width="fill_parent"
+                        android:orientation="horizontal"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20px"
+                        android:layout_marginBottom="5dip">
+                        <TextView android:id="@+id/category_legend_music"
+                            style="@style/CategoryLegendStyle"
+                            android:drawableLeft="@drawable/legend_music" />
+                        <TextView android:id="@+id/category_legend_video"
+                            style="@style/CategoryLegendStyle"
+                            android:drawableLeft="@drawable/legend_video" />
+                        <TextView android:id="@+id/category_legend_picture"
+                            style="@style/CategoryLegendStyle"
+                            android:drawableLeft="@drawable/legend_picture" />
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="fill_parent"
+                        android:orientation="horizontal"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20px"
+                        android:layout_marginBottom="5dip">
+                        <TextView android:id="@+id/category_legend_theme"
+                            style="@style/CategoryLegendStyle"
+                            android:drawableLeft="@drawable/legend_theme" />
+                        <TextView android:id="@+id/category_legend_document"
+                            style="@style/CategoryLegendStyle"
+                            android:drawableLeft="@drawable/legend_document" />
+                        <TextView android:id="@+id/category_legend_zip"
+                            style="@style/CategoryLegendStyle"
+                            android:drawableLeft="@drawable/legend_zip" />
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="fill_parent"
+                        android:orientation="horizontal"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20px"
+                        android:layout_marginBottom="5dip">
+                        <TextView android:id="@+id/category_legend_apk"
+                            style="@style/CategoryLegendStyle"
+                            android:drawableLeft="@drawable/legend_apk" />
+                        <TextView android:id="@+id/category_legend_other"
+                            style="@style/CategoryLegendStyle"
+                            android:drawableLeft="@drawable/legend_other" />
+                        <TextView
+                            style="@style/CategoryLegendStyle" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
+
+    <LinearLayout android:id="@+id/moving_operation_bar"
+        android:visibility="gone"
+        style="@style/BottomButtonBar">
+
+        <Button android:id="@+id/button_moving_confirm"
+            android:text="@string/confirm"
+            style="@style/BottomButton.Left"/>
+
+        <Button android:id="@+id/button_moving_cancel"
+            android:text="@string/operation_cancel"
+            style="@style/BottomButton.Right"/>
+    </LinearLayout>
+</LinearLayout>

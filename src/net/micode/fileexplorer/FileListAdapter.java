@@ -28,20 +28,22 @@ import android.widget.ArrayAdapter;
 import java.util.List;
 
 public class FileListAdapter extends ArrayAdapter<FileInfo> {
-    private static final String LOG_TAG = "FileListAdapter";
-
     private LayoutInflater mInflater;
 
     private FileViewInteractionHub mFileViewInteractionHub;
 
     private FileIconHelper mFileIcon;
 
-    public FileListAdapter(Context context, int resource, List<FileInfo> objects,
-            FileViewInteractionHub f, FileIconHelper fileIcon) {
+    private Context mContext;
+
+    public FileListAdapter(Context context, int resource,
+            List<FileInfo> objects, FileViewInteractionHub f,
+            FileIconHelper fileIcon) {
         super(context, resource, objects);
         mInflater = LayoutInflater.from(context);
         mFileViewInteractionHub = f;
         mFileIcon = fileIcon;
+        mContext = context;
     }
 
     @Override
@@ -50,13 +52,15 @@ public class FileListAdapter extends ArrayAdapter<FileInfo> {
         if (convertView != null) {
             view = convertView;
         } else {
-            view = mInflater.inflate(R.layout.file_browse_item, parent, false);
+            view = mInflater.inflate(R.layout.file_browser_item, parent, false);
         }
 
-        FileListItem listItem = (FileListItem) view;
         FileInfo lFileInfo = mFileViewInteractionHub.getItem(position);
-        listItem.bind(lFileInfo, mFileViewInteractionHub, mFileIcon);
-
+        FileListItem.setupFileListItemInfo(mContext, view, lFileInfo,
+                mFileIcon, mFileViewInteractionHub);
+        view.findViewById(R.id.file_checkbox_area).setOnClickListener(
+                new FileListItem.FileItemOnClickListener(mContext,
+                        mFileViewInteractionHub));
         return view;
     }
 }

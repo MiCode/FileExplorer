@@ -67,12 +67,15 @@
     <string name="operation_show_sys">Show hidden files</string>
     <string name="operation_unfavorite">Remove from Favorites</string>
     <string name="removed_favorite">Removed from Favorites</string>
+    <string name="sd_card_available">Space available:\u0020</string>
+    <string name="sd_card_name">SD card:\u0020</string>
     <string name="sd_folder">SD card</string>
     <string name="search_hint">Search Files</string>
     <string name="search_title">Search Files</string>
     <string name="start_server">Start Service</string>
     <string name="stop_server">Stop Service</string>
     <string name="storage_warning">External storage is not available or cannot be read</string>
+    <string name="tab_category">Browse</string>
     <string name="tab_remote">FTP</string>
     <string name="tab_sd">SD card</string>
     <string name="wifi_state">WLAN Status</string>

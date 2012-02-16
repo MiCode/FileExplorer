@@ -129,6 +129,16 @@
         <item name="android:textSize">10dip</item>
         <item name="android:layout_marginLeft">2dip</item>
     </style>
+    <style name="CategoryLegendStyleLand">
+        <item name="android:layout_height">0dip</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">left</item>
+        <item name="android:drawablePadding">5px</item>
+        <item name="android:textColor">#222222</item>
+        <item name="android:textSize">10dip</item>
+        <item name="android:layout_marginLeft">2dip</item>
+    </style>
     <style name="InformationDialog" parent="android:style/Theme.Dialog">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowBackground">@drawable/popup_bg</item>

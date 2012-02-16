@@ -28,6 +28,7 @@
     <string name="operation_hide_sys">隐藏点文件和隐藏文件</string>
     <string name="cancel">取消</string>
     <string name="no_file">没有文件</string>
+    <string name="tab_category">分类浏览</string>
     <string name="tab_sd">SD卡</string>
     <string name="tab_remote">远程管理</string>
     <string name="sd_folder">SD卡</string>
@@ -45,6 +46,8 @@
     <string name="operation_create_folder_message">请输入文件夹名称</string>
     <string name="operation_delete_confirm_message">确认删除?</string>
     <string name="new_folder_name">新建文件夹</string>
+    <string name="sd_card_name">SD卡:</string>
+    <string name="sd_card_available">可用:</string>
     <string name="file_info_location">位置:</string>
     <string name="file_info_size">大小:</string>
     <string name="file_info_modified">时间:</string>

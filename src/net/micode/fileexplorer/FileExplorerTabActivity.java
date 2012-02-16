@@ -18,13 +18,17 @@
  */
 
 package net.micode.fileexplorer;
+
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.ActionMode;
@@ -49,19 +53,41 @@ public class FileExplorerTabActivity extends Activity {
         bar.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_HOME);
 
         mTabsAdapter = new TabsAdapter(this, mViewPager);
+        mTabsAdapter.addTab(bar.newTab().setText(R.string.tab_category),
+                FileCategoryActivity.class, null);
         mTabsAdapter.addTab(bar.newTab().setText(R.string.tab_sd),
                 FileViewActivity.class, null);
         mTabsAdapter.addTab(bar.newTab().setText(R.string.tab_remote),
                 ServerControlActivity.class, null);
-        if (savedInstanceState != null) {
-            bar.setSelectedNavigationItem(savedInstanceState.getInt(INSTANCESTATE_TAB, 0));
-        }
+        bar.setSelectedNavigationItem(PreferenceManager.getDefaultSharedPreferences(this)
+                .getInt(INSTANCESTATE_TAB, Util.CATEGORY_TAB_INDEX));
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt(INSTANCESTATE_TAB, getActionBar().getSelectedNavigationIndex());
+    protected void onPause() {
+        super.onPause();
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
+        editor.putInt(INSTANCESTATE_TAB, getActionBar().getSelectedNavigationIndex());
+        editor.commit();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        if (getActionBar().getSelectedNavigationIndex() == Util.CATEGORY_TAB_INDEX) {
+            FileCategoryActivity categoryFragement =(FileCategoryActivity) mTabsAdapter.getItem(Util.CATEGORY_TAB_INDEX);
+            if (categoryFragement.isHomePage()) {
+                reInstantiateCategoryTab();
+            } else {
+                categoryFragement.setConfigurationChanged(true);
+            }
+        }
+        super.onConfigurationChanged(newConfig);
+    }
+
+    public void reInstantiateCategoryTab() {
+        mTabsAdapter.destroyItem(mViewPager, Util.CATEGORY_TAB_INDEX,
+                mTabsAdapter.getItem(Util.CATEGORY_TAB_INDEX));
+        mTabsAdapter.instantiateItem(mViewPager, Util.CATEGORY_TAB_INDEX);
     }
 
     @Override
@@ -87,6 +113,10 @@ public class FileExplorerTabActivity extends Activity {
 
     public ActionMode getActionMode() {
         return mActionMode;
+    }
+
+    public Fragment getFragment(int tabIndex) {
+        return mTabsAdapter.getItem(tabIndex);
     }
 
     /**

@@ -222,7 +222,7 @@ public class ServerControlActivity extends Fragment implements IBackPressedListe
             startStopButtonText.setTextColor(Color.GRAY);
         }
 
-        ipText.setVisibility(running ? View.VISIBLE : View.GONE);
+        ipText.setVisibility(running ? View.VISIBLE : View.INVISIBLE);
         instructionText.setVisibility(running ? View.VISIBLE : View.GONE);
         instructionTextPre.setVisibility(running ? View.GONE : View.VISIBLE);
     }

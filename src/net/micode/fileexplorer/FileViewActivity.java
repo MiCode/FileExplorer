@@ -19,9 +19,6 @@
 
 package net.micode.fileexplorer;
 
-import net.micode.fileexplorer.FileExplorerTabActivity.IBackPressedListener;
-import net.micode.fileexplorer.FileViewInteractionHub.Mode;
-
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.BroadcastReceiver;
@@ -41,14 +38,18 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import net.micode.fileexplorer.FileExplorerTabActivity.IBackPressedListener;
+import net.micode.fileexplorer.FileViewInteractionHub.Mode;
+
 import java.io.File;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class FileViewActivity extends Fragment implements IFileInteractionListener, IBackPressedListener {
+public class FileViewActivity extends Fragment implements
+        IFileInteractionListener, IBackPressedListener {
 
-    public static final String EXT_FILETER_KEY = "ext_filter";
+    public static final String EXT_FILTER_KEY = "ext_filter";
 
     private static final String LOG_TAG = "FileViewActivity";
 
@@ -114,7 +115,7 @@ public class FileViewActivity extends Fragment implements IFileInteractionListen
 
             boolean pickFolder = intent.getBooleanExtra(PICK_FOLDER, false);
             if (!pickFolder) {
-                String[] exts = intent.getStringArrayExtra(EXT_FILETER_KEY);
+                String[] exts = intent.getStringArrayExtra(EXT_FILTER_KEY);
                 if (exts != null) {
                     mFileCagetoryHelper.setCustomCategory(exts);
                 }
@@ -146,7 +147,7 @@ public class FileViewActivity extends Fragment implements IFileInteractionListen
 
         mFileListView = (ListView) mRootView.findViewById(R.id.file_path_list);
         mFileIconHelper = new FileIconHelper(mActivity);
-        mAdapter = new FileListAdapter(mActivity, R.layout.file_browse_item, mFileNameList, mFileViewInteractionHub,
+        mAdapter = new FileListAdapter(mActivity, R.layout.file_browser_item, mFileNameList, mFileViewInteractionHub,
                 mFileIconHelper);
 
         boolean baseSd = intent.getBooleanExtra(GlobalConsts.KEY_BASE_SD, true);
@@ -242,6 +243,7 @@ public class FileViewActivity extends Fragment implements IFileInteractionListen
                 }
             } else {
                 int i;
+                boolean isLast = false;
                 for (i = 0; i < mScrollPositionList.size(); i++) {
                     if (!path.startsWith(mScrollPositionList.get(i).path)) {
                         break;
@@ -410,7 +412,9 @@ public class FileViewActivity extends Fragment implements IFileInteractionListen
     }
 
     public void refresh() {
-        mFileViewInteractionHub.refreshFileList();
+        if (mFileViewInteractionHub != null) {
+            mFileViewInteractionHub.refreshFileList();
+        }
     }
 
     public void moveToFile(ArrayList<FileInfo> files) {
@@ -429,6 +433,15 @@ public class FileViewActivity extends Fragment implements IFileInteractionListen
     @Override
     public FileIconHelper getFileIconHelper() {
         return mFileIconHelper;
+    }
+
+    public boolean setPath(String location) {
+        if (!location.startsWith(mFileViewInteractionHub.getRootPath())) {
+            return false;
+        }
+        mFileViewInteractionHub.setCurrentPath(location);
+        mFileViewInteractionHub.refreshFileList();
+        return true;
     }
 
     @Override

@@ -5,35 +5,39 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/wifi_state"
-        android:layout_gravity="center_horizontal"
-        android:singleLine="true"
-        android:layout_marginTop="70px"
-        style="?android:attr/textAppearanceMedium" />
-    <TextView
-        android:id="@+id/wifi_state"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/wifi_state"
-        android:layout_gravity="center_horizontal"
-        android:singleLine="true"
-        android:layout_marginTop="14px"
-        style="?android:attr/textAppearanceSmall" />
-    <ImageView
-        android:id="@+id/wifi_state_image"
-        android:src="@drawable/wifi_state4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="25px" />
-
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
         android:orientation="vertical"
-        android:layout_height="fill_parent"
+        android:gravity="center">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/wifi_state"
+            android:layout_gravity="center_horizontal"
+            android:singleLine="true"
+            style="?android:attr/textAppearanceMedium" />
+        <TextView
+            android:id="@+id/wifi_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/wifi_state"
+            android:layout_gravity="center_horizontal"
+            android:singleLine="true"
+            android:padding="5px"
+            style="?android:attr/textAppearanceSmall"/>
+        <ImageView
+            android:id="@+id/wifi_state_image"
+            android:src="@drawable/wifi_state4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="wrap_content"
         android:gravity="bottom">
         <TextView
             android:id="@+id/instruction_pre"
@@ -42,7 +46,6 @@
             android:layout_gravity="center_horizontal"
             android:text="@string/instruction_pre"
             android:visibility="gone"
-            android:layout_marginBottom="73px"
             style="?android:attr/textAppearanceSmall" />
         <TextView
             android:id="@+id/instruction"
@@ -74,8 +77,8 @@
             android:layout_width="274px"
             android:layout_gravity="center_horizontal"
             android:gravity="center"
-            android:layout_marginTop="30px"
-            android:layout_marginBottom="50px"
+            android:layout_marginTop="20px"
+            android:layout_marginBottom="20px"
             android:background="@drawable/btn_bottom_last">
             <TextView
                 android:id="@+id/start_stop_button_text"

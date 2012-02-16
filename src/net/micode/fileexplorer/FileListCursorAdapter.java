@@ -25,6 +25,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
+
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -38,16 +39,19 @@ public class FileListCursorAdapter extends CursorAdapter {
 
     private HashMap<Integer, FileInfo> mFileNameList = new HashMap<Integer, FileInfo>();
 
-    public FileListCursorAdapter(Context context, Cursor cursor, FileViewInteractionHub f, FileIconHelper fileIcon) {
+    private Context mContext;
+
+    public FileListCursorAdapter(Context context, Cursor cursor,
+            FileViewInteractionHub f, FileIconHelper fileIcon) {
         super(context, cursor, false /* auto-requery */);
         mFactory = LayoutInflater.from(context);
         mFileViewInteractionHub = f;
         mFileIcon = fileIcon;
+        mContext = context;
     }
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        FileListItem listItem = (FileListItem) view;
         FileInfo fileInfo = getFileItem(cursor.getPosition());
         if (fileInfo == null) {
             // file is not existing, create a fake info
@@ -58,13 +62,15 @@ public class FileListCursorAdapter extends CursorAdapter {
             fileInfo.fileSize = cursor.getLong(FileCategoryHelper.COLUMN_SIZE);
             fileInfo.ModifiedDate = cursor.getLong(FileCategoryHelper.COLUMN_DATE);
         }
-
-        listItem.bind(fileInfo, mFileViewInteractionHub, mFileIcon);
+        FileListItem.setupFileListItemInfo(mContext, view, fileInfo, mFileIcon,
+                mFileViewInteractionHub);
+        view.findViewById(R.id.category_file_checkbox_area).setOnClickListener(
+                new FileListItem.FileItemOnClickListener(mContext, mFileViewInteractionHub));
     }
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
-        return mFactory.inflate(R.layout.file_browse_item, parent, false);
+        return mFactory.inflate(R.layout.category_file_browser_item, parent, false);
     }
 
     @Override
@@ -109,6 +115,7 @@ public class FileListCursorAdapter extends CursorAdapter {
     }
 
     private FileInfo getFileInfo(Cursor cursor) {
-        return (cursor == null || cursor.getCount() == 0) ? null : Util.GetFileInfo(cursor.getString(FileCategoryHelper.COLUMN_PATH));
+        return (cursor == null || cursor.getCount() == 0) ? null : Util
+                .GetFileInfo(cursor.getString(FileCategoryHelper.COLUMN_PATH));
     }
 }

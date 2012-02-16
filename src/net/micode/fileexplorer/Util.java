@@ -19,16 +19,6 @@
 
 package net.micode.fileexplorer;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FilenameFilter;
-import java.io.IOException;
-import java.text.DateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -43,6 +33,17 @@ import android.util.Log;
 import android.view.ActionMode;
 import android.view.View;
 import android.widget.TextView;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
 
 public class Util {
     private static String ANDROID_SECURE = "/mnt/sdcard/.android_secure";
@@ -392,4 +393,20 @@ public class Util {
             mode.setTitle(context.getString(R.string.multi_select_title,selectedNum));
         }
     }
+
+    public static HashSet<String> sDocMimeTypesSet = new HashSet<String>() {
+        {
+            add("text/plain");
+            add("text/plain");
+            add("application/pdf");
+            add("application/msword");
+            add("application/vnd.ms-excel");
+            add("application/vnd.ms-excel");
+        }
+    };
+
+    public static String sZipFileMimeType = "application/zip";
+
+    public static int CATEGORY_TAB_INDEX = 0;
+    public static int SDCARD_TAB_INDEX = 1;
 }

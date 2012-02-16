@@ -18,72 +18,66 @@
  */
 
 package net.micode.fileexplorer;
-import net.micode.fileexplorer.FileViewInteractionHub.Mode;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
-import android.util.AttributeSet;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
-public class FileListItem extends LinearLayout {
-    private static Context mContext;
-    private static FileViewInteractionHub mFileViewInteractionHub;
+import net.micode.fileexplorer.FileViewInteractionHub.Mode;
 
-    public FileListItem(Context context) {
-        super(context);
-        mContext = context;
-    }
-
-    public FileListItem(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        mContext = context;
-    }
-
-    public final void bind(FileInfo file, FileViewInteractionHub f, FileIconHelper mFileIcon) {
-        mFileViewInteractionHub = f;
-        FileInfo lFileInfo = file;
+public class FileListItem {
+    public static void setupFileListItemInfo(Context context, View view,
+            FileInfo fileInfo, FileIconHelper fileIcon,
+            FileViewInteractionHub fileViewInteractionHub) {
 
         // if in moving mode, show selected file always
-        if (mFileViewInteractionHub.isMoveState()) {
-            lFileInfo.Selected = mFileViewInteractionHub.isFileSelected(lFileInfo.filePath);
+        if (fileViewInteractionHub.isMoveState()) {
+            fileInfo.Selected = fileViewInteractionHub.isFileSelected(fileInfo.filePath);
         }
 
-        ImageView checkbox = (ImageView) findViewById(R.id.file_checkbox);
-        if (mFileViewInteractionHub.getMode() == Mode.Pick) {
+        ImageView checkbox = (ImageView) view.findViewById(R.id.file_checkbox);
+        if (fileViewInteractionHub.getMode() == Mode.Pick) {
             checkbox.setVisibility(View.GONE);
         } else {
-            checkbox.setVisibility(mFileViewInteractionHub.canShowCheckBox() ? View.VISIBLE : View.GONE);
-            checkbox.setImageResource(lFileInfo.Selected ? R.drawable.btn_check_on_holo_light
+            checkbox.setVisibility(fileViewInteractionHub.canShowCheckBox() ? View.VISIBLE : View.GONE);
+            checkbox.setImageResource(fileInfo.Selected ? R.drawable.btn_check_on_holo_light
                     : R.drawable.btn_check_off_holo_light);
-            checkbox.setTag(lFileInfo);
-            View checkArea = findViewById(R.id.file_checkbox_area);
-            checkArea.setOnClickListener(checkClick);
-            setSelected(lFileInfo.Selected);
+            checkbox.setTag(fileInfo);
+            view.setSelected(fileInfo.Selected);
         }
 
-        Util.setText(this, R.id.file_name, lFileInfo.fileName);
-        Util.setText(this, R.id.file_count, lFileInfo.IsDir ? "(" + lFileInfo.Count + ")" : "");
-        Util.setText(this, R.id.modified_time, Util.formatDateString(mContext, lFileInfo.ModifiedDate));
-        Util.setText(this, R.id.file_size, (lFileInfo.IsDir ? "" : Util.convertStorage(lFileInfo.fileSize)));
+        Util.setText(view, R.id.file_name, fileInfo.fileName);
+        Util.setText(view, R.id.file_count, fileInfo.IsDir ? "(" + fileInfo.Count + ")" : "");
+        Util.setText(view, R.id.modified_time, Util.formatDateString(context, fileInfo.ModifiedDate));
+        Util.setText(view, R.id.file_size, (fileInfo.IsDir ? "" : Util.convertStorage(fileInfo.fileSize)));
 
-        ImageView lFileImage = (ImageView) findViewById(R.id.file_image);
-        ImageView lFileImageFrame = (ImageView) findViewById(R.id.file_image_frame);
+        ImageView lFileImage = (ImageView) view.findViewById(R.id.file_image);
+        ImageView lFileImageFrame = (ImageView) view.findViewById(R.id.file_image_frame);
 
-        if (lFileInfo.IsDir) {
+        if (fileInfo.IsDir) {
             lFileImageFrame.setVisibility(View.GONE);
             lFileImage.setImageResource(R.drawable.folder);
         } else {
-            mFileIcon.setIcon(lFileInfo, lFileImage, lFileImageFrame);
+            fileIcon.setIcon(fileInfo, lFileImage, lFileImageFrame);
         }
     }
 
-    private OnClickListener checkClick = new OnClickListener() {
+    public static class FileItemOnClickListener implements OnClickListener {
+        private Context mContext;
+        private FileViewInteractionHub mFileViewInteractionHub;
+
+        public FileItemOnClickListener(Context context,
+                FileViewInteractionHub fileViewInteractionHub) {
+            mContext = context;
+            mFileViewInteractionHub = fileViewInteractionHub;
+        }
 
         @Override
         public void onClick(View v) {
@@ -94,7 +88,9 @@ public class FileListItem extends LinearLayout {
             tag.Selected = !tag.Selected;
             ActionMode actionMode = ((FileExplorerTabActivity) mContext).getActionMode();
             if (actionMode == null) {
-                actionMode = startActionMode(new ModeCallback());
+                actionMode = ((FileExplorerTabActivity) mContext)
+                        .startActionMode(new ModeCallback(mContext,
+                                mFileViewInteractionHub));
                 ((FileExplorerTabActivity) mContext).setActionMode(actionMode);
             } else {
                 actionMode.invalidate();
@@ -106,18 +102,33 @@ public class FileListItem extends LinearLayout {
                 tag.Selected = !tag.Selected;
             }
 
-            Util.updateActionModeTitle(actionMode, mContext, mFileViewInteractionHub
-                    .getSelectedFileList().size());
+            Util.updateActionModeTitle(actionMode, mContext,
+                    mFileViewInteractionHub.getSelectedFileList().size());
         }
-    };
+    }
 
     public static class ModeCallback implements ActionMode.Callback {
         private Menu mMenu;
+        private Context mContext;
+        private FileViewInteractionHub mFileViewInteractionHub;
 
         private void initMenuItemSelectAllOrCancel() {
             boolean isSelectedAll = mFileViewInteractionHub.isSelectedAll();
             mMenu.findItem(R.id.action_cancel).setVisible(isSelectedAll);
             mMenu.findItem(R.id.action_select_all).setVisible(!isSelectedAll);
+        }
+
+        private void scrollToSDcardTab() {
+            ActionBar bar = ((FileExplorerTabActivity) mContext).getActionBar();
+            if (bar.getSelectedNavigationIndex() != Util.SDCARD_TAB_INDEX) {
+                bar.setSelectedNavigationItem(Util.SDCARD_TAB_INDEX);
+            }
+        }
+
+        public ModeCallback(Context context,
+                FileViewInteractionHub fileViewInteractionHub) {
+            mContext = context;
+            mFileViewInteractionHub = fileViewInteractionHub;
         }
 
         @Override
@@ -138,18 +149,24 @@ public class FileListItem extends LinearLayout {
 
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            switch(item.getItemId()) {
+            switch (item.getItemId()) {
                 case R.id.action_delete:
                     mFileViewInteractionHub.onOperationDelete();
                     mode.finish();
                     break;
                 case R.id.action_copy:
-                    mFileViewInteractionHub.onOperationCopy();
+                    ((FileViewActivity) ((FileExplorerTabActivity) mContext)
+                            .getFragment(Util.SDCARD_TAB_INDEX))
+                            .copyFile(mFileViewInteractionHub.getSelectedFileList());
                     mode.finish();
+                    scrollToSDcardTab();
                     break;
                 case R.id.action_move:
-                    mFileViewInteractionHub.onOperationMove();
+                    ((FileViewActivity) ((FileExplorerTabActivity) mContext)
+                            .getFragment(Util.SDCARD_TAB_INDEX))
+                            .moveToFile(mFileViewInteractionHub.getSelectedFileList());
                     mode.finish();
+                    scrollToSDcardTab();
                     break;
                 case R.id.action_send:
                     mFileViewInteractionHub.onOperationSend();
