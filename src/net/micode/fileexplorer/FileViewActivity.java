@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 2010-2011, The MiCode Open Source Community (www.micode.net)
  *
  * This file is part of FileExplorer.
@@ -18,6 +18,11 @@
  */
 
 package net.micode.fileexplorer;
+
+import java.io.File;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Collections;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -40,11 +45,6 @@ import android.widget.ListView;
 
 import net.micode.fileexplorer.FileExplorerTabActivity.IBackPressedListener;
 import net.micode.fileexplorer.FileViewInteractionHub.Mode;
-
-import java.io.File;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Collections;
 
 public class FileViewActivity extends Fragment implements
         IFileInteractionListener, IBackPressedListener {
@@ -75,6 +75,8 @@ public class FileViewActivity extends Fragment implements
     private Activity mActivity;
 
     private View mRootView;
+
+    private static final String sdDir = Util.getSdDirectory();
 
     // memorize the scroll positions of previous paths
     private ArrayList<PathScrollPositionItem> mScrollPositionList = new ArrayList<PathScrollPositionItem>();
@@ -150,29 +152,30 @@ public class FileViewActivity extends Fragment implements
         mAdapter = new FileListAdapter(mActivity, R.layout.file_browser_item, mFileNameList, mFileViewInteractionHub,
                 mFileIconHelper);
 
-        boolean baseSd = intent.getBooleanExtra(GlobalConsts.KEY_BASE_SD, true);
-        final String sdDir = Util.getSdDirectory();
+        boolean baseSd = intent.getBooleanExtra(GlobalConsts.KEY_BASE_SD, !FileExplorerPreferenceActivity.isReadRoot(mActivity));
+        Log.i(LOG_TAG, "baseSd = " + baseSd);
 
         String rootDir = intent.getStringExtra(ROOT_DIRECTORY);
         if (!TextUtils.isEmpty(rootDir)) {
-            if (baseSd && sdDir.startsWith(rootDir)) {
-                rootDir = sdDir;
+            if (baseSd && this.sdDir.startsWith(rootDir)) {
+                rootDir = this.sdDir;
             }
         } else {
-            rootDir = baseSd ? sdDir : GlobalConsts.ROOT_PATH;
+            rootDir = baseSd ? this.sdDir : GlobalConsts.ROOT_PATH;
         }
         mFileViewInteractionHub.setRootPath(rootDir);
 
-        String currentDir = null;
+        String currentDir = FileExplorerPreferenceActivity.getPrimaryFolder(mActivity);
         Uri uri = intent.getData();
         if (uri != null) {
-            if (baseSd && sdDir.startsWith(uri.getPath())) {
-                currentDir = sdDir;
+            if (baseSd && this.sdDir.startsWith(uri.getPath())) {
+                currentDir = this.sdDir;
             } else {
                 currentDir = uri.getPath();
             }
-            mFileViewInteractionHub.setCurrentPath(currentDir);
         }
+        mFileViewInteractionHub.setCurrentPath(currentDir);
+        Log.i(LOG_TAG, "CurrentDir = " + currentDir);
 
         mBackspaceExit = (uri != null)
                 && (TextUtils.isEmpty(action)
@@ -369,32 +372,21 @@ public class FileViewActivity extends Fragment implements
 
     @Override
     public String getDisplayPath(String path) {
-        String root = mFileViewInteractionHub.getRootPath();
-
-        if (root.equals(path))
-            return getString(R.string.sd_folder);
-
-        if (!root.equals("/")) {
-            int pos = path.indexOf(root);
-            if (pos == 0) {
-                path = path.substring(root.length());
-            }
+        if (path.startsWith(this.sdDir)) {
+            return getString(R.string.sd_folder) + path.substring(this.sdDir.length());
+        } else {
+            return path;
         }
-
-        return getString(R.string.sd_folder) + path;
     }
 
     @Override
     public String getRealPath(String displayPath) {
-        String root = mFileViewInteractionHub.getRootPath();
-        if (displayPath.equals(getString(R.string.sd_folder)))
-            return root;
-
-        String ret = displayPath.substring(displayPath.indexOf("/"));
-        if (!root.equals("/")) {
-            ret = root + ret;
+        final String perfixName = getString(R.string.sd_folder);
+        if (displayPath.startsWith(perfixName)) {
+            return this.sdDir + displayPath.substring(perfixName.length());
+        } else {
+            return displayPath;
         }
-        return ret;
     }
 
     @Override
@@ -452,6 +444,7 @@ public class FileViewActivity extends Fragment implements
         return mFileNameList.get(pos);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void sortCurrentList(FileSortHelper sort) {
         Collections.sort(mFileNameList, sort.getComparator());

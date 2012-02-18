@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+    <PreferenceCategory android:title="@string/preference_title">
+        <EditTextPreference
+            android:defaultValue="@string/default_primary_folder"
+            android:key="pref_key_primary_folder"
+            android:title="@string/pref_primary_folder"
+            android:summary="@string/pref_primary_folder_summary"/>
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_key_read_root"
+            android:title="@string/pref_read_root" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
