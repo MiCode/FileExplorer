@@ -80,6 +80,13 @@
                 android:resource="@xml/searchable" />
         </activity>
 
+        <activity
+            android:label="@string/menu_setting"
+            android:launchMode="singleTop"
+            android:name="FileExplorerPreferenceActivity"
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
+        </activity>
+
         <meta-data
             android:name="android.app.default_searchable"
             android:value=".SearchActivity" />
