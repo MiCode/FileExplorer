@@ -96,5 +96,5 @@
     <string name="preference_title">常规设置</string>
     <string name="pref_primary_folder">主页文件夹</string>
     <string name="pref_read_root">读取根目录</string>
-    <string name="pref_primary_folder_summary">程序启动时显示的文件夹，当然路径为<xliff:g id="string">%1$s</xliff:g></string>
+    <string name="pref_primary_folder_summary">程序启动时显示的文件夹，当前路径为<xliff:g id="string">%1$s</xliff:g></string>
 </resources>

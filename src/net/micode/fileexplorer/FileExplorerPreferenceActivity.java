@@ -28,6 +28,7 @@ import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 
 /**
  *
@@ -84,16 +85,18 @@ public class FileExplorerPreferenceActivity extends PreferenceActivity implement
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         String primaryFolder = settings.getString(PRIMARY_FOLDER, context.getString(R.string.default_primary_folder, GlobalConsts.ROOT_PATH));
 
-        if (primaryFolder.isEmpty()) { // setting primary folder = empty("")
+        if (TextUtils.isEmpty(primaryFolder)) { // setting primary folder = empty("")
             primaryFolder = GlobalConsts.ROOT_PATH;
         }
 
-		int length = primaryFolder.length();
-		if (length > 1 && SYSTEM_SEPARATOR.equals(primaryFolder.substring(length - 1))) { // length = 1, ROOT_PATH
-			return primaryFolder.substring(0, length - 1);
-		} else {
-			return primaryFolder;
-		}
+        // it's remove the end char of the home folder setting when it with the '/' at the end.
+        // if has the backslash at end of the home folder, it's has minor bug at "UpLevel" function.
+        int length = primaryFolder.length();
+        if (length > 1 && SYSTEM_SEPARATOR.equals(primaryFolder.substring(length - 1))) { // length = 1, ROOT_PATH
+            return primaryFolder.substring(0, length - 1);
+        } else {
+            return primaryFolder;
+        }
     }
 
     public static boolean isReadRoot(Context context) {
