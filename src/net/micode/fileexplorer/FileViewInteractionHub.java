@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) 2010-2011, The MiCode Open Source Community (www.micode.net)
  *
  * This file is part of FileExplorer.
