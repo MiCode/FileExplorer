@@ -289,7 +289,7 @@ public class FileCategoryActivity extends Fragment implements IFileInteractionLi
 
     @Override
     public boolean onBack() {
-        if (isHomePage() || curViewPage == ViewPage.NoSD) {
+        if (isHomePage() || curViewPage == ViewPage.NoSD || mFileViewInteractionHub == null) {
             return false;
         }
 
