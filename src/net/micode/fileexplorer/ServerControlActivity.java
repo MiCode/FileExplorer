@@ -111,10 +111,9 @@ public class ServerControlActivity extends Fragment implements IBackPressedListe
         instructionTextPre = (TextView) mRootView.findViewById(R.id.instruction_pre);
         startStopButton = mRootView.findViewById(R.id.start_stop_button);
         startStopButton.setOnClickListener(startStopListener);
-        
-        //add by fengcunhan
         setWiFiImageView = (ImageView)mRootView.findViewById(R.id.wifi_state_image);
         setWiFiImageView.setOnClickListener(wifiSetListener);
+        
         updateUi();
         UiUpdater.registerClient(handler);
         return mRootView;
@@ -262,7 +261,6 @@ public class ServerControlActivity extends Fragment implements IBackPressedListe
 		
 		@Override
 		public void onClick(View v) {
-			// TODO Auto-generated method stub
 			Intent intent=new Intent(Settings.ACTION_WIFI_SETTINGS);
 			startActivity(intent);
 		}
