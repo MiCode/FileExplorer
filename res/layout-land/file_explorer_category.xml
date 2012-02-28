@@ -202,7 +202,7 @@
             </LinearLayout>
 
             <!-- category information -->
-            <LinearLayout android:layout_width="wrap_content"
+            <LinearLayout android:layout_width="0dip" android:layout_weight="1"
                 android:orientation="vertical" android:layout_height="match_parent"
                 android:layout_gravity="right" android:background="@drawable/information_bg"
                 android:paddingTop="5dip">
