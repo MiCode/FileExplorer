@@ -67,8 +67,8 @@
     <string name="operation_show_sys">Show hidden files</string>
     <string name="operation_unfavorite">Remove from Favorites</string>
     <string name="removed_favorite">Removed from Favorites</string>
-    <string name="sd_card_available">Space available:\u0020</string>
-    <string name="sd_card_name">SD card:\u0020</string>
+    <string name="sd_card_available">Space available:<xliff:g id="available_size">%1$s</xliff:g></string>
+    <string name="sd_card_size">SD card:<xliff:g id="total_size">%1$s</xliff:g></string>
     <string name="sd_folder">SD card</string>
     <string name="search_hint">Search Files</string>
     <string name="search_title">Search Files</string>

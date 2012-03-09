@@ -144,8 +144,8 @@ public class FileCategoryActivity extends Fragment implements IFileInteractionLi
         SDCardInfo sdCardInfo = Util.getSDCardInfo();
         if (sdCardInfo != null) {
             mCategoryBar.setFullValue(sdCardInfo.total);
-            setTextView(R.id.sd_card_capacity, Util.convertStorage(sdCardInfo.total));
-            setTextView(R.id.sd_card_available, Util.convertStorage(sdCardInfo.free));
+            setTextView(R.id.sd_card_capacity, getString(R.string.sd_card_size, Util.convertStorage(sdCardInfo.total)));
+            setTextView(R.id.sd_card_available, getString(R.string.sd_card_available, Util.convertStorage(sdCardInfo.free)));
         }
 
         mFileCagetoryHelper.refreshCategoryInfo();
