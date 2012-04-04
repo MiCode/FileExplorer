@@ -230,6 +230,7 @@ public class FileIconLoader implements Callback {
      */
     private boolean loadCachedIcon(ImageView view, String path, FileCategory cate) {
         ImageHolder holder = mImageCache.get(path);
+        
         if (holder == null) {
             holder = ImageHolder.create(cate);
             if (holder == null)

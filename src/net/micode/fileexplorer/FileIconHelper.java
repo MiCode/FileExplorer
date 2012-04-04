@@ -24,7 +24,6 @@ import net.micode.fileexplorer.FileCategoryHelper.FileCategory;
 import net.micode.fileexplorer.FileIconLoader.IconLoadFinishListener;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -115,7 +114,6 @@ public class FileIconHelper implements IconLoadFinishListener {
         switch (fc) {
             case Apk:
                 set = mIconLoader.loadIcon(fileImage, filePath, fileId, fc);
-                Log.d("APKIcon", filePath + set);
                 break;
             case Picture:
             case Video:
