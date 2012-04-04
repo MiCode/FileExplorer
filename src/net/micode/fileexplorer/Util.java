@@ -366,6 +366,7 @@ public class Util {
         ArrayList<FavoriteItem> list = new ArrayList<FavoriteItem>();
         list.add(new FavoriteItem(context.getString(R.string.favorite_photo), makePath(getSdDirectory(), "DCIM/Camera")));
         list.add(new FavoriteItem(context.getString(R.string.favorite_sdcard), getSdDirectory()));
+        //list.add(new FavoriteItem(context.getString(R.string.favorite_root), getSdDirectory()));
         list.add(new FavoriteItem(context.getString(R.string.favorite_screen_cap), makePath(getSdDirectory(), "MIUI/screen_cap")));
         list.add(new FavoriteItem(context.getString(R.string.favorite_ringtone), makePath(getSdDirectory(), "MIUI/ringtone")));
         return list;

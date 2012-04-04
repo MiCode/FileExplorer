@@ -37,6 +37,7 @@ import android.text.TextUtils;
 public class FileExplorerPreferenceActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener {
     private static final String PRIMARY_FOLDER = "pref_key_primary_folder";
     private static final String READ_ROOT = "pref_key_read_root";
+    private static final String SHOW_REAL_PATH = "pref_key_show_real_path";
     private static final String SYSTEM_SEPARATOR = File.separator;
 
     private EditTextPreference mEditTextPreference;
@@ -106,6 +107,11 @@ public class FileExplorerPreferenceActivity extends PreferenceActivity implement
         boolean isReadRootWhenSettingPrimaryFolderWithoutSdCardPrefix = !getPrimaryFolder(context).startsWith(Util.getSdDirectory());
 
         return isReadRootFromSetting || isReadRootWhenSettingPrimaryFolderWithoutSdCardPrefix;
+    }
+    
+    public static boolean showRealPath(Context context) {
+    	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+    	return settings.getBoolean(SHOW_REAL_PATH, false);
     }
 
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
     <string name="app_name">文件管理</string>
     <string name="confirm">确定</string>
     <string name="menu_item_search">搜索</string>
@@ -87,14 +87,17 @@
     <string name="dialog_type_image">图像</string>
     <string name="favorite_photo">照片</string>
     <string name="favorite_sdcard">SD卡</string>
+    <string name="favorite_root">根目录</string>
     <string name="favorite_screen_cap">MIUI截屏</string>
     <string name="favorite_ringtone">铃声</string>
-    <string name="multi_select_title" >已选择 <xliff:g id="number">%1$s</xliff:g> 个</string>
-
+    <string name="multi_select_title">已选择 <xliff:g id="number">%1$s</xliff:g> 个</string>
     <string name="menu_setting">设置</string>
     <string name="menu_exit">退出</string>
     <string name="preference_title">常规设置</string>
     <string name="pref_primary_folder">主页文件夹</string>
     <string name="pref_read_root">读取根目录</string>
+    <string name="pref_show_real_path">显示真实路径</string>
     <string name="pref_primary_folder_summary">程序启动时显示的文件夹，当前路径为<xliff:g id="string">%1$s</xliff:g></string>
+    <string name="pref_show_real_path_summary">在导航栏中显示真实路径</string>
+
 </resources>
