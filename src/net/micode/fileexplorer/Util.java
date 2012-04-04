@@ -27,11 +27,14 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Environment;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.File;
@@ -40,6 +43,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -138,18 +144,103 @@ public class Util {
     }
 
     public static Drawable getApkIcon(Context context, String path) {
+    	return getApkIcon_fromAPK(context, path);
+    	/*
         PackageManager pm = context.getPackageManager();
         PackageInfo info = pm.getPackageArchiveInfo(path, PackageManager.GET_ACTIVITIES);
         if (info != null) {
             ApplicationInfo appInfo = info.applicationInfo;
-            try {
-                return pm.getApplicationIcon(appInfo);
-            } catch (OutOfMemoryError e) {
-                Log.e(LOG_TAG, e.toString());
+            Log.d("APKIcon", path+appInfo.uid);
+            if (appInfo.uid != -1){
+                try {
+                    return pm.getApplicationIcon(appInfo);
+                } catch (OutOfMemoryError e) {
+                    Log.e(LOG_TAG, e.toString());
+                }
             }
+            else
+            	return getApkIcon_fromAPK(context, path);
         }
         return null;
+        */
     }
+    
+    /*
+     * 之前的函数获取图标只能得到已安装APK的图标，不能得到全部APK图标
+     * 在网上找了能够正确获取图标的方法。
+     * 本来想先判断该APK是否已经安装然后再决定如何获取图标，但是貌似不能用UID?
+     */
+    public static Drawable getApkIcon_fromAPK(Context context, String apkPath){
+    	//从APK文件获得图标
+    	
+    	String PATH_PackageParser = "android.content.pm.PackageParser";
+    	
+    	String PATH_AssetManager = "android.content.res.AssetManager";
+    	
+    	try {
+    		Class<?> pkgParserCls = Class.forName(PATH_PackageParser);
+    		Class<?>[] typeArgs = { String.class };
+    		Constructor<?> pkgParserCt = pkgParserCls.getConstructor(typeArgs);
+    		Object[] valueArgs = { apkPath };
+    		Object pkgParser = pkgParserCt.newInstance(valueArgs);
+    		
+    		DisplayMetrics metrics = new DisplayMetrics();
+    		metrics.setToDefaults();
+    		typeArgs = new Class<?>[] { File.class, String.class, 
+    				DisplayMetrics.class, int.class };
+    		Method pkgParser_parsePackageMtd = pkgParserCls.getDeclaredMethod(
+    				"parsePackage", typeArgs);
+    		
+    		valueArgs = new Object[] { new File(apkPath), apkPath, metrics, 0 };
+    		
+    		Object pkgParserPkg = pkgParser_parsePackageMtd.invoke(pkgParser, 
+    				valueArgs);
+    		
+    		if (pkgParserPkg==null) {
+    			return null;
+    		}
+    		Field appInfoFld = pkgParserPkg.getClass().
+    				getDeclaredField("applicationInfo");
+    		
+    		if (appInfoFld==null) {
+    			return null;
+    		}
+    		ApplicationInfo info = (ApplicationInfo) appInfoFld.get(pkgParserPkg);
+    		
+    		Class<?> assetMagCls = Class.forName(PATH_AssetManager);
+    		Object assetMag = assetMagCls.newInstance();
+    		typeArgs = new Class[1];
+    		typeArgs[0] = String.class;
+    		Method assetMag_addAssetPathMtd = assetMagCls.
+    				getDeclaredMethod("addAssetPath", typeArgs);
+    		valueArgs = new Object[1];
+    		valueArgs[0] = apkPath;
+    		assetMag_addAssetPathMtd.invoke(assetMag, valueArgs);
+    		
+    		Resources res = context.getResources();
+    		typeArgs = new Class[3];
+    		typeArgs[0] = assetMag.getClass();
+    		typeArgs[1] = res.getDisplayMetrics().getClass();
+    		typeArgs[2] = res.getConfiguration().getClass();
+    		Constructor<Resources> resCt = Resources.class.getConstructor(typeArgs);
+    		valueArgs = new Object[3];
+    		valueArgs[0] = assetMag;
+    		valueArgs[1] = res.getDisplayMetrics();
+    		valueArgs[2] = res.getConfiguration();
+    		res = (Resources) resCt.newInstance(valueArgs);
+    		
+    		if (info != null) {
+    			if (info.icon != 0) {
+    				return  res.getDrawable(info.icon);
+    				}
+    			} 
+    		} 
+    	catch (Exception e) {
+    		Log.e(LOG_TAG, e.toString());
+    		}
+    	return null;
+    	}
+
 
     public static String getExtFromFilename(String filename) {
         int dotPosition = filename.lastIndexOf('.');
