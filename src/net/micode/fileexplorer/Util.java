@@ -140,24 +140,6 @@ public class Util {
 
     public static Drawable getApkIcon(Context context, String path) {
     	return getApkIcon_fromAPK(context, path);
-    	/*
-        PackageManager pm = context.getPackageManager();
-        PackageInfo info = pm.getPackageArchiveInfo(path, PackageManager.GET_ACTIVITIES);
-        if (info != null) {
-            ApplicationInfo appInfo = info.applicationInfo;
-            Log.d("APKIcon", path+appInfo.uid);
-            if (appInfo.uid != -1){
-                try {
-                    return pm.getApplicationIcon(appInfo);
-                } catch (OutOfMemoryError e) {
-                    Log.e(LOG_TAG, e.toString());
-                }
-            }
-            else
-            	return getApkIcon_fromAPK(context, path);
-        }
-        return null;
-        */
     }
     
 	/*
