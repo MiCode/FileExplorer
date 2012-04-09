@@ -370,9 +370,10 @@ public class FileViewActivity extends Fragment implements
         return false;
     }
 
+    //支持显示真实路径
     @Override
     public String getDisplayPath(String path) {
-        if (path.startsWith(this.sdDir)) {
+        if (path.startsWith(this.sdDir) && !FileExplorerPreferenceActivity.showRealPath(mActivity)) {
             return getString(R.string.sd_folder) + path.substring(this.sdDir.length());
         } else {
             return path;

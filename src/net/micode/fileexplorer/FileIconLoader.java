@@ -27,7 +27,6 @@ import net.micode.fileexplorer.FileCategoryHelper.FileCategory;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Handler;
@@ -230,7 +229,7 @@ public class FileIconLoader implements Callback {
      */
     private boolean loadCachedIcon(ImageView view, String path, FileCategory cate) {
         ImageHolder holder = mImageCache.get(path);
-
+        
         if (holder == null) {
             holder = ImageHolder.create(cate);
             if (holder == null)
@@ -411,7 +410,6 @@ public class FileIconLoader implements Callback {
                 if (holder != null && holder.state == ImageHolder.NEEDED) {
                     // Assuming atomic behavior
                     holder.state = ImageHolder.LOADING;
-
                     switch (id.mCategory) {
                         case Apk:
                             Drawable icon = Util.getApkIcon(mContext, id.mPath);
