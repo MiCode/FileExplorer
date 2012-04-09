@@ -71,7 +71,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:headerDividersEnabled="true"
-            android:footerDividersEnabled="true" />
+            android:footerDividersEnabled="true" android:fastScrollEnabled="true"/>
         <LinearLayout
             android:id="@+id/empty_view"
             android:orientation="vertical"

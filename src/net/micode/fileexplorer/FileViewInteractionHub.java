@@ -342,7 +342,7 @@ public class FileViewInteractionHub implements IOperationProgressListener {
             String displayPath = mFileViewListener.getDisplayPath(mCurrentPath);
             boolean root = true;
             int left = 0;
-            while (pos != -1) {
+            while (pos != -1 && !displayPath.equals("/")) {//如果当前位置在根文件夹则不显示导航条
                 int end = displayPath.indexOf("/", pos);
                 if (end == -1)
                     break;
@@ -360,6 +360,7 @@ public class FileViewInteractionHub implements IOperationProgressListener {
 
                 TextView text = (TextView) listItem.findViewById(R.id.path_name);
                 String substring = displayPath.substring(pos, end);
+                if(substring.isEmpty())substring = "/";
                 text.setText(substring);
 
                 listItem.setOnClickListener(navigationClick);

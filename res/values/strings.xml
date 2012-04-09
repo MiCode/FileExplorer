@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
     <string name="added_favorite">Added to Favorites</string>
     <string name="app_name">File Explorer</string>
     <string name="cancel">Cancel</string>
@@ -87,15 +87,17 @@
     <string name="dialog_type_image">Image</string>
     <string name="favorite_photo">Photo</string>
     <string name="favorite_sdcard">SD Card</string>
-    <string name="favorite_screen_cap">MIUI Screen Shot</string>
+    <string name="favourite_root">Root</string><string name="favorite_screen_cap">MIUI Screen Shot</string>
     <string name="favorite_ringtone">Ringtone</string>
-    <string name="multi_select_title" >Selected <xliff:g id="number">%1$s</xliff:g> item(s)</string>
-
+    <string name="multi_select_title">Selected <xliff:g id="number">%1$s</xliff:g> item(s)</string>
     <string name="menu_setting">Preferences</string>
     <string name="menu_exit">Exit</string>
     <string name="preference_title">General Settings</string>
     <string name="pref_primary_folder">Home folder</string>
     <string name="pref_read_root">Read root</string>
+    <string name="pref_show_real_path">Display real path</string>
     <string name="default_primary_folder">/mnt/sdcard</string>
     <string name="pref_primary_folder_summary">The folder that appears when the app starts, and current value is <xliff:g id="string">%1$s</xliff:g></string>
+    <string name="pref_show_real_path_summary">Show real path in navigation bar</string>
+
 </resources>
