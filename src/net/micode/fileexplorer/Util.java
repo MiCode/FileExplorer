@@ -28,7 +28,6 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
 import android.view.ActionMode;
@@ -138,25 +137,19 @@ public class Util {
         return lFileInfo;
     }
 
-    public static Drawable getApkIcon(Context context, String path) {
-    	return getApkIcon_fromAPK(context, path);
-    }
-    
 	/*
 	 * 采用了新的办法获取APK图标，之前的失败是因为android中存在的一个BUG,通过
 	 * appInfo.publicSourceDir = apkPath;来修正这个问题，详情参见:
 	 * http://code.google.com/p/android/issues/detail?id=9151
 	 */
-	public static Drawable getApkIcon_fromAPK(Context context, String apkPath) {
+	public static Drawable getApkIcon(Context context, String apkPath) {
 		PackageManager pm = context.getPackageManager();
 		PackageInfo info = pm.getPackageArchiveInfo(apkPath,
 				PackageManager.GET_ACTIVITIES);
 		if (info != null) {
 			ApplicationInfo appInfo = info.applicationInfo;
-            if (Build.VERSION.SDK_INT >= 8) {
-                appInfo.sourceDir = apkPath;
-                appInfo.publicSourceDir = apkPath;
-            }
+			appInfo.sourceDir = apkPath;
+			appInfo.publicSourceDir = apkPath;
 			try {
 				return appInfo.loadIcon(pm);
 			} catch (OutOfMemoryError e) {
