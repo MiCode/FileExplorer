@@ -101,9 +101,12 @@ public class FileListItem {
             } else {
                 tag.Selected = !tag.Selected;
             }
-
             Util.updateActionModeTitle(actionMode, mContext,
                     mFileViewInteractionHub.getSelectedFileList().size());
+            
+            Menu mMenu = actionMode.getMenu();
+            mMenu.findItem(R.id.action_cancel).setVisible(mFileViewInteractionHub.isSelected());
+            mMenu.findItem(R.id.action_select_all).setVisible(!mFileViewInteractionHub.isSelectedAll());
         }
     }
 
