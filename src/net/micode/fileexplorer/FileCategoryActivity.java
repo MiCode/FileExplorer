@@ -91,6 +91,7 @@ public class FileCategoryActivity extends Fragment implements IFileInteractionLi
         mFileViewActivity = (FileViewActivity) ((FileExplorerTabActivity) mActivity)
                 .getFragment(Util.SDCARD_TAB_INDEX);
         mRootView = inflater.inflate(R.layout.file_explorer_category, container, false);
+        curViewPage = ViewPage.Invalid;
         mFileViewInteractionHub = new FileViewInteractionHub(this);
         mFileViewInteractionHub.setMode(Mode.View);
         mFileViewInteractionHub.setRootPath("/");
