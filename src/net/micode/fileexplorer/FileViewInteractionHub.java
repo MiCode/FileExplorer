@@ -1029,6 +1029,10 @@ public class FileViewInteractionHub implements IOperationProgressListener {
     public boolean isSelectedAll() {
         return mFileViewListener.getItemCount() != 0 && mCheckedFileNameList.size() == mFileViewListener.getItemCount();
     }
+    
+    public boolean isSelected() {
+        return mCheckedFileNameList.size() != 0;
+    }
 
     public void clearSelection() {
         if (mCheckedFileNameList.size() > 0) {
