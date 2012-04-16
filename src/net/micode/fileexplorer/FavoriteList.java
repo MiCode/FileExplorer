@@ -79,7 +79,6 @@ public class FavoriteList implements FavoriteDatabaseListener {
         }
 
         mFavoriteListAdapter.notifyDataSetChanged();
-        c.close();
     }
 
     public void initList() {

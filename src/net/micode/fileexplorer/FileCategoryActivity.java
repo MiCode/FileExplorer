@@ -239,6 +239,9 @@ public class FileCategoryActivity extends Fragment implements IFileInteractionLi
             FileCategory f = button2Category.get(v.getId());
             if (f != null) {
                 onCategorySelected(f);
+                if (f != FileCategory.Favorite) {
+                    setHasOptionsMenu(true);
+                }
             }
         }
 
@@ -311,10 +314,9 @@ public class FileCategoryActivity extends Fragment implements IFileInteractionLi
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
-        if (isHomePage() || mFileCagetoryHelper.getCurCategory() == FileCategory.Favorite) {
-            return;
+        if (!isHomePage() && mFileCagetoryHelper.getCurCategory() != FileCategory.Favorite) {
+            mFileViewInteractionHub.onPrepareOptionsMenu(menu);
         }
-        mFileViewInteractionHub.onPrepareOptionsMenu(menu);
     }
 
     public boolean onRefreshFileList(String path, FileSortHelper sort) {
@@ -378,6 +380,7 @@ public class FileCategoryActivity extends Fragment implements IFileInteractionLi
                 mFileViewInteractionHub.clearSelection();
                 break;
             case GlobalConsts.OPERATION_UP_LEVEL:
+                setHasOptionsMenu(false);
                 showPage(ViewPage.Home);
                 break;
             default:
