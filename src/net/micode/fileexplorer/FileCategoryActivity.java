@@ -91,6 +91,7 @@ public class FileCategoryActivity extends Fragment implements IFileInteractionLi
         mFileViewActivity = (FileViewActivity) ((FileExplorerTabActivity) mActivity)
                 .getFragment(Util.SDCARD_TAB_INDEX);
         mRootView = inflater.inflate(R.layout.file_explorer_category, container, false);
+        curViewPage = ViewPage.Invalid;
         mFileViewInteractionHub = new FileViewInteractionHub(this);
         mFileViewInteractionHub.setMode(Mode.View);
         mFileViewInteractionHub.setRootPath("/");
@@ -144,8 +145,8 @@ public class FileCategoryActivity extends Fragment implements IFileInteractionLi
         SDCardInfo sdCardInfo = Util.getSDCardInfo();
         if (sdCardInfo != null) {
             mCategoryBar.setFullValue(sdCardInfo.total);
-            setTextView(R.id.sd_card_capacity, Util.convertStorage(sdCardInfo.total));
-            setTextView(R.id.sd_card_available, Util.convertStorage(sdCardInfo.free));
+            setTextView(R.id.sd_card_capacity, getString(R.string.sd_card_size, Util.convertStorage(sdCardInfo.total)));
+            setTextView(R.id.sd_card_available, getString(R.string.sd_card_available, Util.convertStorage(sdCardInfo.free)));
         }
 
         mFileCagetoryHelper.refreshCategoryInfo();
@@ -238,6 +239,9 @@ public class FileCategoryActivity extends Fragment implements IFileInteractionLi
             FileCategory f = button2Category.get(v.getId());
             if (f != null) {
                 onCategorySelected(f);
+                if (f != FileCategory.Favorite) {
+                    setHasOptionsMenu(true);
+                }
             }
         }
 
@@ -310,10 +314,9 @@ public class FileCategoryActivity extends Fragment implements IFileInteractionLi
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
-        if (isHomePage() || mFileCagetoryHelper.getCurCategory() == FileCategory.Favorite) {
-            return;
+        if (!isHomePage() && mFileCagetoryHelper.getCurCategory() != FileCategory.Favorite) {
+            mFileViewInteractionHub.onPrepareOptionsMenu(menu);
         }
-        mFileViewInteractionHub.onPrepareOptionsMenu(menu);
     }
 
     public boolean onRefreshFileList(String path, FileSortHelper sort) {
@@ -377,6 +380,7 @@ public class FileCategoryActivity extends Fragment implements IFileInteractionLi
                 mFileViewInteractionHub.clearSelection();
                 break;
             case GlobalConsts.OPERATION_UP_LEVEL:
+                setHasOptionsMenu(false);
                 showPage(ViewPage.Home);
                 break;
             default:
@@ -563,7 +567,6 @@ public class FileCategoryActivity extends Fragment implements IFileInteractionLi
             // refresh file list view in another tab
             mFileViewActivity.refresh();
         } else {
-            mActivity.getActionBar().setSelectedNavigationItem(Util.CATEGORY_TAB_INDEX);
             preViewPage = curViewPage;
             showPage(ViewPage.NoSD);
         }

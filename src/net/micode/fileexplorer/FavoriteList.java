@@ -37,11 +37,13 @@ public class FavoriteList implements FavoriteDatabaseListener {
 
     private Context mContext;
 
-    public FavoriteList(Context context, ListView list, FavoriteDatabaseListener listener, FileIconHelper iconHelper) {
+    public FavoriteList(Context context, ListView list, FavoriteDatabaseListener listener,
+            FileIconHelper iconHelper) {
         mContext = context;
 
         mFavoriteDatabase = new FavoriteDatabaseHelper(context, this);
-        mFavoriteListAdapter = new FavoriteListAdapter(context, R.layout.favorite_item, mFavoriteList, iconHelper);
+        mFavoriteListAdapter = new FavoriteListAdapter(context, R.layout.favorite_item,
+                mFavoriteList, iconHelper);
         setupFavoriteListView(list);
         mListener = listener;
     }
@@ -77,7 +79,6 @@ public class FavoriteList implements FavoriteDatabaseListener {
         }
 
         mFavoriteListAdapter.notifyDataSetChanged();
-        c.close();
     }
 
     public void initList() {
@@ -121,9 +122,9 @@ public class FavoriteList implements FavoriteDatabaseListener {
 
         if (favorite.fileInfo.IsDir) {
             FileExplorerTabActivity activity = (FileExplorerTabActivity) mContext;
-            ((FileViewActivity)activity.getFragment(Util.SDCARD_TAB_INDEX)).setPath(favorite.location);
-            activity.getActionBar().setSelectedNavigationItem(
-                    Util.SDCARD_TAB_INDEX);
+            ((FileViewActivity) activity.getFragment(Util.SDCARD_TAB_INDEX))
+                    .setPath(favorite.location);
+            activity.getActionBar().setSelectedNavigationItem(Util.SDCARD_TAB_INDEX);
         } else {
             try {
                 IntentBuilder.viewFile(mContext, favorite.fileInfo.filePath);
@@ -139,9 +140,8 @@ public class FavoriteList implements FavoriteDatabaseListener {
     private OnCreateContextMenuListener mListViewContextMenuListener = new OnCreateContextMenuListener() {
         @Override
         public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
-            AdapterContextMenuInfo info = (AdapterContextMenuInfo) menuInfo;
-
-            menu.add(0, MENU_UNFAVORITE, 0, R.string.operation_unfavorite).setOnMenuItemClickListener(menuItemClick);
+            menu.add(0, MENU_UNFAVORITE, 0, R.string.operation_unfavorite)
+                    .setOnMenuItemClickListener(menuItemClick);
         }
     };
 

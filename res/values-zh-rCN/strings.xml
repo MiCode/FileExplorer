@@ -46,8 +46,8 @@
     <string name="operation_create_folder_message">请输入文件夹名称</string>
     <string name="operation_delete_confirm_message">确认删除?</string>
     <string name="new_folder_name">新建文件夹</string>
-    <string name="sd_card_name">SD卡:</string>
-    <string name="sd_card_available">可用:</string>
+    <string name="sd_card_size">SD卡:<xliff:g id="total_size">%1$s</xliff:g></string>
+    <string name="sd_card_available">可用:<xliff:g id="available_size">%1$s</xliff:g></string>
     <string name="file_info_location">位置:</string>
     <string name="file_info_size">大小:</string>
     <string name="file_info_modified">时间:</string>

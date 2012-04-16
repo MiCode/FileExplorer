@@ -55,8 +55,19 @@ public class FavoriteListAdapter extends ArrayAdapter<FavoriteItem> {
         FileInfo lFileInfo = item.fileInfo;
 
         Util.setText(view, R.id.file_name, item.title != null ? item.title : lFileInfo.fileName);
-        Util.setText(view, R.id.modified_time, Util.formatDateString(mContext, lFileInfo.ModifiedDate));
-        Util.setText(view, R.id.file_size, (lFileInfo.IsDir ? "" : Util.convertStorage(lFileInfo.fileSize)));
+        if (lFileInfo.ModifiedDate > 0) {
+            Util.setText(view, R.id.modified_time, Util.formatDateString(mContext, lFileInfo.ModifiedDate));
+            view.findViewById(R.id.modified_time).setVisibility(View.VISIBLE);
+        } else {
+            view.findViewById(R.id.modified_time).setVisibility(View.GONE);
+        }
+        view.findViewById(R.id.modified_time).setVisibility(lFileInfo.ModifiedDate > 0 ? View.VISIBLE: View.GONE);
+        if (lFileInfo.IsDir) {
+            view.findViewById(R.id.file_size).setVisibility(View.GONE);
+        } else {
+            view.findViewById(R.id.file_size).setVisibility(View.VISIBLE);
+            Util.setText(view, R.id.file_size, Util.convertStorage(lFileInfo.fileSize));
+        }
 
         ImageView lFileImage = (ImageView) view.findViewById(R.id.file_image);
         ImageView lFileImageFrame = (ImageView) view.findViewById(R.id.file_image_frame);

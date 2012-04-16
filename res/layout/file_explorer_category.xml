@@ -221,23 +221,14 @@
                     android:layout_marginBottom="5dip"
                     android:layout_marginLeft="20px">
 
-                    <ImageView android:src="@drawable/sd_card_icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:scaleType="fitCenter" android:gravity="center"
-                        android:layout_gravity="center" />
-
-                    <TextView android:text="@string/sd_card_name"
-                        style="@style/InformationTextStyle"
-                        android:layout_marginLeft="10dip" />
                     <TextView android:id="@+id/sd_card_capacity"
-                        style="@style/InformationTextStyle" />
-
-                    <TextView android:text="@string/sd_card_available"
                         style="@style/InformationTextStyle"
-                        android:layout_marginLeft="10dip" />
+                        android:drawableLeft="@drawable/sd_card_icon" />
+
                     <TextView android:id="@+id/sd_card_available"
-                        style="@style/InformationTextStyle" />
+                        style="@style/InformationTextStyle"
+                        android:layout_marginLeft="10dip"
+                        android:drawableLeft="@drawable/sd_card_available_icon" />
                 </LinearLayout>
 
                 <net.micode.fileexplorer.CategoryBar
