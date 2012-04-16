@@ -77,6 +77,7 @@
     <string name="instruction_pre">启动后可以从电脑端远程管理手机文件</string>
     <string name="instruction">请在“我的电脑”地址栏中输入：</string>
     <string name="no_wifi">无WiFi网络</string>
+    <string name="no_wifi_hint">无WiFi网络,点击以查看WiFi设置</string>
     <string name="search_title">搜索文件</string>
     <string name="search_hint">输入部分或全部文件名</string>
     <string name="file_size">%d 字节</string>
