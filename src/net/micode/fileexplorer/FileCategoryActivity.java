@@ -564,7 +564,6 @@ public class FileCategoryActivity extends Fragment implements IFileInteractionLi
             // refresh file list view in another tab
             mFileViewActivity.refresh();
         } else {
-            mActivity.getActionBar().setSelectedNavigationItem(Util.CATEGORY_TAB_INDEX);
             preViewPage = curViewPage;
             showPage(ViewPage.NoSD);
         }
