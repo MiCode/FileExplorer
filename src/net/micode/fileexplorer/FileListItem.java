@@ -103,10 +103,6 @@ public class FileListItem {
             }
             Util.updateActionModeTitle(actionMode, mContext,
                     mFileViewInteractionHub.getSelectedFileList().size());
-            
-            Menu mMenu = actionMode.getMenu();
-            mMenu.findItem(R.id.action_cancel).setVisible(mFileViewInteractionHub.isSelected());
-            mMenu.findItem(R.id.action_select_all).setVisible(!mFileViewInteractionHub.isSelectedAll());
         }
     }
 
@@ -147,6 +143,10 @@ public class FileListItem {
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
             mMenu.findItem(R.id.action_copy_path).setVisible(
                     mFileViewInteractionHub.getSelectedFileList().size() == 1);
+            mMenu.findItem(R.id.action_cancel).setVisible(
+            		mFileViewInteractionHub.isSelected());
+            mMenu.findItem(R.id.action_select_all).setVisible(
+            		!mFileViewInteractionHub.isSelectedAll());
             return true;
         }
 
