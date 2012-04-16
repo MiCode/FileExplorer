@@ -215,7 +215,10 @@ public class FileViewActivity extends Fragment implements
 
     @Override
     public boolean onBack() {
-        return !mBackspaceExit && mFileViewInteractionHub.onBackPressed();
+        if (mBackspaceExit || !Util.isSDCardReady() || mFileViewInteractionHub == null) {
+            return false;
+        }
+        return mFileViewInteractionHub.onBackPressed();
     }
 
     private class PathScrollPositionItem {
