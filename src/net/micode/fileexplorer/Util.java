@@ -400,6 +400,9 @@ public class Util {
     public static void updateActionModeTitle(ActionMode mode, Context context, int selectedNum) {
         if (mode != null) {
             mode.setTitle(context.getString(R.string.multi_select_title,selectedNum));
+            if(selectedNum == 0){
+            	mode.finish();
+            }
         }
     }
 
