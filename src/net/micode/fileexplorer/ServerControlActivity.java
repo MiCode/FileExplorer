@@ -114,12 +114,14 @@ public class ServerControlActivity extends Fragment implements IBackPressedListe
         UiUpdater.registerClient(handler);
         
         // quickly turn on or off wifi.
-        mRootView.findViewById(R.id.wifi_state_image).setOnClickListener(new OnClickListener() {
-        public void onClick(View v) {
-        Intent intent = new Intent(android.provider.Settings.ACTION_WIFI_SETTINGS);
-        startActivity(intent);
-        }
-        });
+        mRootView.findViewById(R.id.wifi_state_image).setOnClickListener(
+                new OnClickListener() {
+                    public void onClick(View v) {
+                        Intent intent = new Intent(
+                                android.provider.Settings.ACTION_WIFI_SETTINGS);
+                        startActivity(intent);
+                    }
+                });
         
         return mRootView;
     }
