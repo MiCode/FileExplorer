@@ -112,6 +112,17 @@ public class ServerControlActivity extends Fragment implements IBackPressedListe
 
         updateUi();
         UiUpdater.registerClient(handler);
+        
+        // quickly turn on or off wifi.
+        mRootView.findViewById(R.id.wifi_state_image).setOnClickListener(
+                new OnClickListener() {
+                    public void onClick(View v) {
+                        Intent intent = new Intent(
+                                android.provider.Settings.ACTION_WIFI_SETTINGS);
+                        startActivity(intent);
+                    }
+                });
+        
         return mRootView;
     }
 
@@ -179,7 +190,7 @@ public class ServerControlActivity extends Fragment implements IBackPressedListe
         String wifiId = info != null ? info.getSSID() : null;
         boolean isWifiReady = FTPServerService.isWifiEnabled();
 
-        setText(R.id.wifi_state, isWifiReady ? wifiId : getString(R.string.no_wifi));
+        setText(R.id.wifi_state, isWifiReady ? wifiId : getString(R.string.no_wifi_hint));
         ImageView wifiImg = (ImageView) mRootView.findViewById(R.id.wifi_state_image);
         wifiImg.setImageResource(isWifiReady ? R.drawable.wifi_state4 : R.drawable.wifi_state0);
 
