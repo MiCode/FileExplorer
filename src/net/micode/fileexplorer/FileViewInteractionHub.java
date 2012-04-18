@@ -381,6 +381,10 @@ public class FileViewInteractionHub implements IOperationProgressListener {
             return true;
         }
 
+        /*
+         *在这里控制了按返回键回到上一级菜单的动作
+         *下一步修改为真正的后退动作
+         */
         if (!mRoot.equals(mCurrentPath)) {
             mCurrentPath = new File(mCurrentPath).getParent();
             refreshFileList();
@@ -1054,7 +1058,11 @@ public class FileViewInteractionHub implements IOperationProgressListener {
             Log.e(LOG_TAG, "fail to view file: " + e.toString());
         }
     }
-
+    
+    /*
+     *在这里控制了按返回键回到上一级菜单的动作
+     *下一步修改为真正的后退动作
+     */
     public boolean onBackPressed() {
         if (mDropdownNavigation.getVisibility() == View.VISIBLE) {
             mDropdownNavigation.setVisibility(View.GONE);
