@@ -435,8 +435,7 @@ public class FileViewActivity extends Fragment implements
         if (!location.startsWith(mFileViewInteractionHub.getRootPath())) {
             return false;
         }
-        mFileViewInteractionHub.setCurrentPath(location);
-        mFileViewInteractionHub.refreshFileList();
+        mFileViewInteractionHub.jump2Folder(location);
         return true;
     }
 

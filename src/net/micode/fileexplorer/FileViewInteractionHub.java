@@ -21,6 +21,7 @@ package net.micode.fileexplorer;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Stack;
 
 import android.R.drawable;
 import android.app.AlertDialog;
@@ -86,6 +87,8 @@ public class FileViewInteractionHub implements IOperationProgressListener {
     private ImageView mNavigationBarUpDownArrow;
 
     private Context mContext;
+    
+    private Stack<String> mFolderHistroyStack;
 
     public enum Mode {
         View, Pick
@@ -98,6 +101,7 @@ public class FileViewInteractionHub implements IOperationProgressListener {
         mFileOperationHelper = new FileOperationHelper(this);
         mFileSortHelper = new FileSortHelper();
         mContext = mFileViewListener.getContext();
+        mFolderHistroyStack = new Stack<String>();
     }
 
     private void showProgress(String msg) {
@@ -231,7 +235,7 @@ public class FileViewInteractionHub implements IOperationProgressListener {
                     onOperationButtonCancel();
                     break;
                 case R.id.path_pane_up_level:
-                    onOperationUpLevel();
+                    onOperationUpLevel(false);
                     ActionMode mode = ((FileExplorerTabActivity) mContext).getActionMode();
                     if (mode != null) {
                         mode.finish();
@@ -311,6 +315,26 @@ public class FileViewInteractionHub implements IOperationProgressListener {
         }
         mFileViewListener.onDataChanged();
     }
+    
+    public void jump2Folder(String path) {
+        if(mCurrentPath != path){//判断是否应该将当前路径添加到历史堆栈中
+            mFolderHistroyStack.add(mCurrentPath.isEmpty() ? mRoot : mCurrentPath);
+        }
+        mCurrentPath = path;
+        refreshFileList();
+    }
+    
+    /*
+     *返回上一个文件夹
+     *当存在上一个浏览过的文件夹时返回true，当已经是最初浏览的文件夹时返回false
+     *(用以判断是否该退出)
+     */
+    private boolean folderReturn(){
+        if(mFolderHistroyStack.empty())return false;
+        mCurrentPath = mFolderHistroyStack.pop();
+        refreshFileList();
+        return true;
+    }
 
     private OnClickListener navigationClick = new OnClickListener() {
 
@@ -322,12 +346,7 @@ public class FileViewInteractionHub implements IOperationProgressListener {
             if (mFileViewListener.onNavigation(path))
                 return;
 
-            if(path.isEmpty()){
-                mCurrentPath = mRoot;
-            } else{
-                mCurrentPath = path;
-            }
-            refreshFileList();
+            jump2Folder(path.isEmpty() ? mRoot : path);
         }
 
     };
@@ -374,7 +393,7 @@ public class FileViewInteractionHub implements IOperationProgressListener {
         }
     }
 
-    public boolean onOperationUpLevel() {
+    public boolean onOperationUpLevel(boolean isreturn) {
         showDropdownNavigation(false);
 
         if (mFileViewListener.onOperation(GlobalConsts.OPERATION_UP_LEVEL)) {
@@ -385,12 +404,15 @@ public class FileViewInteractionHub implements IOperationProgressListener {
          *在这里控制了按返回键回到上一级菜单的动作
          *下一步修改为真正的后退动作
          */
-        if (!mRoot.equals(mCurrentPath)) {
-            mCurrentPath = new File(mCurrentPath).getParent();
-            refreshFileList();
-            return true;
+        if (isreturn) {//真正的后退动作
+            return folderReturn();
+        } else {//返回上一级文件夹
+            if (!mRoot.equals(mCurrentPath)) {
+                jump2Folder(new File(mCurrentPath).getParent());
+                return true;
+            }
         }
-
+        
         return false;
     }
 
@@ -981,12 +1003,11 @@ public class FileViewInteractionHub implements IOperationProgressListener {
             return;
         }
 
-        mCurrentPath = getAbsoluteName(mCurrentPath, lFileInfo.fileName);
+        jump2Folder(getAbsoluteName(mCurrentPath, lFileInfo.fileName));
         ActionMode actionMode = ((FileExplorerTabActivity) mContext).getActionMode();
         if (actionMode != null) {
             actionMode.finish();
         }
-        refreshFileList();
     }
 
     public void setRootPath(String path) {
@@ -1068,7 +1089,7 @@ public class FileViewInteractionHub implements IOperationProgressListener {
             mDropdownNavigation.setVisibility(View.GONE);
         } else if (isInSelection()) {
             clearSelection();
-        } else if (!onOperationUpLevel()) {
+        } else if (!onOperationUpLevel(true)) {
             return false;
         }
         return true;
