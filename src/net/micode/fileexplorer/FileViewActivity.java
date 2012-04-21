@@ -87,7 +87,8 @@ public class FileViewActivity extends Fragment implements
 
             String action = intent.getAction();
             Log.v(LOG_TAG, "received broadcast:" + intent.toString());
-            if (action.equals(Intent.ACTION_MEDIA_MOUNTED) || action.equals(Intent.ACTION_MEDIA_UNMOUNTED)) {
+            if (action.equals(Intent.ACTION_MEDIA_MOUNTED)
+                    || action.equals(Intent.ACTION_MEDIA_UNMOUNTED)) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -101,18 +102,22 @@ public class FileViewActivity extends Fragment implements
     private boolean mBackspaceExit;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
         mActivity = getActivity();
         // getWindow().setFormat(android.graphics.PixelFormat.RGBA_8888);
-        mRootView = inflater.inflate(R.layout.file_explorer_list, container, false);
-        ActivitiesManager.getInstance().registerActivity(ActivitiesManager.ACTIVITY_FILE_VIEW, mActivity);
+        mRootView = inflater.inflate(R.layout.file_explorer_list, container,
+                false);
+        ActivitiesManager.getInstance().registerActivity(
+                ActivitiesManager.ACTIVITY_FILE_VIEW, mActivity);
 
         mFileCagetoryHelper = new FileCategoryHelper(mActivity);
         mFileViewInteractionHub = new FileViewInteractionHub(this);
         Intent intent = mActivity.getIntent();
         String action = intent.getAction();
         if (!TextUtils.isEmpty(action)
-                && (action.equals(Intent.ACTION_PICK) || action.equals(Intent.ACTION_GET_CONTENT))) {
+                && (action.equals(Intent.ACTION_PICK) || action
+                        .equals(Intent.ACTION_GET_CONTENT))) {
             mFileViewInteractionHub.setMode(Mode.Pick);
 
             boolean pickFolder = intent.getBooleanExtra(PICK_FOLDER, false);
@@ -122,26 +127,35 @@ public class FileViewActivity extends Fragment implements
                     mFileCagetoryHelper.setCustomCategory(exts);
                 }
             } else {
-                mFileCagetoryHelper.setCustomCategory(new String[]{} /*folder only*/);
-                mRootView.findViewById(R.id.pick_operation_bar).setVisibility(View.VISIBLE);
+                mFileCagetoryHelper.setCustomCategory(new String[] {} /*
+                                                                       * folder
+                                                                       * only
+                                                                       */);
+                mRootView.findViewById(R.id.pick_operation_bar).setVisibility(
+                        View.VISIBLE);
 
-                mRootView.findViewById(R.id.button_pick_confirm).setOnClickListener(new OnClickListener() {
-                    public void onClick(View v) {
-                        try {
-                            Intent intent = Intent.parseUri(mFileViewInteractionHub.getCurrentPath(), 0);
-                            mActivity.setResult(Activity.RESULT_OK, intent);
-                            mActivity.finish();
-                        } catch (URISyntaxException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
+                mRootView.findViewById(R.id.button_pick_confirm)
+                        .setOnClickListener(new OnClickListener() {
+                            public void onClick(View v) {
+                                try {
+                                    Intent intent = Intent.parseUri(
+                                            mFileViewInteractionHub
+                                                    .getCurrentPath(), 0);
+                                    mActivity.setResult(Activity.RESULT_OK,
+                                            intent);
+                                    mActivity.finish();
+                                } catch (URISyntaxException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
 
-                mRootView.findViewById(R.id.button_pick_cancel).setOnClickListener(new OnClickListener() {
-                    public void onClick(View v) {
-                        mActivity.finish();
-                    }
-                });
+                mRootView.findViewById(R.id.button_pick_cancel)
+                        .setOnClickListener(new OnClickListener() {
+                            public void onClick(View v) {
+                                mActivity.finish();
+                            }
+                        });
             }
         } else {
             mFileViewInteractionHub.setMode(Mode.View);
@@ -149,10 +163,11 @@ public class FileViewActivity extends Fragment implements
 
         mFileListView = (ListView) mRootView.findViewById(R.id.file_path_list);
         mFileIconHelper = new FileIconHelper(mActivity);
-        mAdapter = new FileListAdapter(mActivity, R.layout.file_browser_item, mFileNameList, mFileViewInteractionHub,
-                mFileIconHelper);
+        mAdapter = new FileListAdapter(mActivity, R.layout.file_browser_item,
+                mFileNameList, mFileViewInteractionHub, mFileIconHelper);
 
-        boolean baseSd = intent.getBooleanExtra(GlobalConsts.KEY_BASE_SD, !FileExplorerPreferenceActivity.isReadRoot(mActivity));
+        boolean baseSd = intent.getBooleanExtra(GlobalConsts.KEY_BASE_SD,
+                !FileExplorerPreferenceActivity.isReadRoot(mActivity));
         Log.i(LOG_TAG, "baseSd = " + baseSd);
 
         String rootDir = intent.getStringExtra(ROOT_DIRECTORY);
@@ -165,7 +180,8 @@ public class FileViewActivity extends Fragment implements
         }
         mFileViewInteractionHub.setRootPath(rootDir);
 
-        String currentDir = FileExplorerPreferenceActivity.getPrimaryFolder(mActivity);
+        String currentDir = FileExplorerPreferenceActivity
+                .getPrimaryFolder(mActivity);
         Uri uri = intent.getData();
         if (uri != null) {
             if (baseSd && this.sdDir.startsWith(uri.getPath())) {
@@ -178,8 +194,9 @@ public class FileViewActivity extends Fragment implements
         Log.i(LOG_TAG, "CurrentDir = " + currentDir);
 
         mBackspaceExit = (uri != null)
-                && (TextUtils.isEmpty(action)
-                || (!action.equals(Intent.ACTION_PICK) && !action.equals(Intent.ACTION_GET_CONTENT)));
+                && (TextUtils.isEmpty(action) || (!action
+                        .equals(Intent.ACTION_PICK) && !action
+                        .equals(Intent.ACTION_GET_CONTENT)));
 
         mFileListView.setAdapter(mAdapter);
         mFileViewInteractionHub.refreshFileList();
@@ -215,7 +232,8 @@ public class FileViewActivity extends Fragment implements
 
     @Override
     public boolean onBack() {
-        if (mBackspaceExit || !Util.isSDCardReady() || mFileViewInteractionHub == null) {
+        if (mBackspaceExit || !Util.isSDCardReady()
+                || mFileViewInteractionHub == null) {
             return false;
         }
         return mFileViewInteractionHub.onBackPressed();
@@ -224,6 +242,7 @@ public class FileViewActivity extends Fragment implements
     private class PathScrollPositionItem {
         String path;
         int pos;
+
         PathScrollPositionItem(String s, int p) {
             path = s;
             pos = p;
@@ -233,18 +252,23 @@ public class FileViewActivity extends Fragment implements
     // execute before change, return the memorized scroll position
     private int computeScrollPosition(String path) {
         int pos = 0;
-        if(mPreviousPath!=null) {
+        if (mPreviousPath != null) {
             if (path.startsWith(mPreviousPath)) {
-                int firstVisiblePosition = mFileListView.getFirstVisiblePosition();
+                int firstVisiblePosition = mFileListView
+                        .getFirstVisiblePosition();
                 if (mScrollPositionList.size() != 0
-                        && mPreviousPath.equals(mScrollPositionList.get(mScrollPositionList.size() - 1).path)) {
+                        && mPreviousPath.equals(mScrollPositionList
+                                .get(mScrollPositionList.size() - 1).path)) {
                     mScrollPositionList.get(mScrollPositionList.size() - 1).pos = firstVisiblePosition;
-                    Log.i(LOG_TAG, "computeScrollPosition: update item: " + mPreviousPath + " " + firstVisiblePosition
+                    Log.i(LOG_TAG, "computeScrollPosition: update item: "
+                            + mPreviousPath + " " + firstVisiblePosition
                             + " stack count:" + mScrollPositionList.size());
                     pos = firstVisiblePosition;
                 } else {
-                    mScrollPositionList.add(new PathScrollPositionItem(mPreviousPath, firstVisiblePosition));
-                    Log.i(LOG_TAG, "computeScrollPosition: add item: " + mPreviousPath + " " + firstVisiblePosition
+                    mScrollPositionList.add(new PathScrollPositionItem(
+                            mPreviousPath, firstVisiblePosition));
+                    Log.i(LOG_TAG, "computeScrollPosition: add item: "
+                            + mPreviousPath + " " + firstVisiblePosition
                             + " stack count:" + mScrollPositionList.size());
                 }
             } else {
@@ -260,16 +284,19 @@ public class FileViewActivity extends Fragment implements
                     pos = mScrollPositionList.get(i - 1).pos;
                 }
 
-                for (int j = mScrollPositionList.size() - 1; j >= i-1 && j>=0; j--) {
+                for (int j = mScrollPositionList.size() - 1; j >= i - 1
+                        && j >= 0; j--) {
                     mScrollPositionList.remove(j);
                 }
             }
         }
 
-        Log.i(LOG_TAG, "computeScrollPosition: result pos: " + path + " " + pos + " stack count:" + mScrollPositionList.size());
+        Log.i(LOG_TAG, "computeScrollPosition: result pos: " + path + " " + pos
+                + " stack count:" + mScrollPositionList.size());
         mPreviousPath = path;
         return pos;
     }
+
     public boolean onRefreshFileList(String path, FileSortHelper sort) {
         File file = new File(path);
         if (!file.exists() || !file.isDirectory()) {
@@ -285,13 +312,16 @@ public class FileViewActivity extends Fragment implements
 
         for (File child : listFiles) {
             // do not show selected file if in move state
-            if (mFileViewInteractionHub.isMoveState() && mFileViewInteractionHub.isFileSelected(child.getPath()))
+            if (mFileViewInteractionHub.isMoveState()
+                    && mFileViewInteractionHub.isFileSelected(child.getPath()))
                 continue;
 
             String absolutePath = child.getAbsolutePath();
-            if (Util.isNormalFile(absolutePath) && Util.shouldShowFile(absolutePath)) {
+            if (Util.isNormalFile(absolutePath)
+                    && Util.shouldShowFile(absolutePath)) {
                 FileInfo lFileInfo = Util.GetFileInfo(child,
-                        mFileCagetoryHelper.getFilter(), Settings.instance().getShowDotAndHiddenFiles());
+                        mFileCagetoryHelper.getFilter(), Settings.instance()
+                                .getShowDotAndHiddenFiles());
                 if (lFileInfo != null) {
                     fileList.add(lFileInfo);
                 }
@@ -318,7 +348,7 @@ public class FileViewActivity extends Fragment implements
         navigationBar.setVisibility(sdCardReady ? View.VISIBLE : View.GONE);
         mFileListView.setVisibility(sdCardReady ? View.VISIBLE : View.GONE);
 
-        if(sdCardReady) {
+        if (sdCardReady) {
             mFileViewInteractionHub.refreshFileList();
         }
     }
@@ -354,7 +384,8 @@ public class FileViewActivity extends Fragment implements
     @Override
     public void onPick(FileInfo f) {
         try {
-            Intent intent = Intent.parseUri(Uri.fromFile(new File(f.filePath)).toString(), 0);
+            Intent intent = Intent.parseUri(Uri.fromFile(new File(f.filePath))
+                    .toString(), 0);
             mActivity.setResult(Activity.RESULT_OK, intent);
             mActivity.finish();
             return;
@@ -373,11 +404,13 @@ public class FileViewActivity extends Fragment implements
         return false;
     }
 
-    //支持显示真实路径
+    // 支持显示真实路径
     @Override
     public String getDisplayPath(String path) {
-        if (path.startsWith(this.sdDir) && !FileExplorerPreferenceActivity.showRealPath(mActivity)) {
-            return getString(R.string.sd_folder) + path.substring(this.sdDir.length());
+        if (path.startsWith(this.sdDir)
+                && !FileExplorerPreferenceActivity.showRealPath(mActivity)) {
+            return getString(R.string.sd_folder)
+                    + path.substring(this.sdDir.length());
         } else {
             return path;
         }
