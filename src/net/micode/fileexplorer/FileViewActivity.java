@@ -100,6 +100,7 @@ public class FileViewActivity extends Fragment implements
     };
 
     private boolean mBackspaceExit;
+    private boolean mShowRealPath;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -165,6 +166,8 @@ public class FileViewActivity extends Fragment implements
         mFileIconHelper = new FileIconHelper(mActivity);
         mAdapter = new FileListAdapter(mActivity, R.layout.file_browser_item,
                 mFileNameList, mFileViewInteractionHub, mFileIconHelper);
+
+        mShowRealPath = FileExplorerPreferenceActivity.showRealPath(mActivity);
 
         boolean baseSd = intent.getBooleanExtra(GlobalConsts.KEY_BASE_SD,
                 !FileExplorerPreferenceActivity.isReadRoot(mActivity));
@@ -407,8 +410,7 @@ public class FileViewActivity extends Fragment implements
     // 支持显示真实路径
     @Override
     public String getDisplayPath(String path) {
-        if (path.startsWith(this.sdDir)
-                && !FileExplorerPreferenceActivity.showRealPath(mActivity)) {
+        if (path.startsWith(this.sdDir) && !mShowRealPath) {
             return getString(R.string.sd_folder)
                     + path.substring(this.sdDir.length());
         } else {

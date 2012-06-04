@@ -339,13 +339,19 @@ public class FileViewInteractionHub implements IOperationProgressListener {
 
     /*
      * 返回上一个文件夹当存在上一个浏览过的文件夹时返回true，当已经是最初浏览的文件夹时返回false(用以判断是否该退出)
+     * 新增加了判断是否属于合法路径的判断，用以在变更设置时(是否浏览root目录等)自动过滤掉不该显示的目录
      */
     private boolean folderReturn() {
-        if (mFolderHistroyStack.empty())
-            return false;
-        mCurrentPath = mFolderHistroyStack.pop();
-        refreshFileList();
-        return true;
+        String path = null;
+        while (!mFolderHistroyStack.empty()) {
+            path = mFolderHistroyStack.pop();
+            if (path.startsWith(mRoot)) {
+                mCurrentPath = path;
+                refreshFileList();
+                return true;
+            }
+        }
+        return false;
     }
 
     private OnClickListener navigationClick = new OnClickListener() {
