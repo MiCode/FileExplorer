@@ -37,6 +37,7 @@ import java.util.ArrayList;
 
 public class FileExplorerTabActivity extends Activity {
     private static final String INSTANCESTATE_TAB = "tab";
+    private static final int DEFAULT_OFFSCREEN_PAGES = 2;
     ViewPager mViewPager;
     TabsAdapter mTabsAdapter;
     ActionMode mActionMode;
@@ -47,6 +48,7 @@ public class FileExplorerTabActivity extends Activity {
 
         setContentView(R.layout.fragment_pager);
         mViewPager = (ViewPager) findViewById(R.id.pager);
+        mViewPager.setOffscreenPageLimit(DEFAULT_OFFSCREEN_PAGES);
 
         final ActionBar bar = getActionBar();
         bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
