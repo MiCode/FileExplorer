@@ -87,30 +87,59 @@ public class CategoryBar extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        int width = getWidth() - MARGIN * 2;
         Drawable d = getDrawable(R.drawable.category_bar_empty);
 
-        int left = MARGIN;
-        Rect bounds = new Rect(left, 0, left + width, d.getIntrinsicHeight());
+        int width = getWidth() - MARGIN * 2;
+        int height = getHeight() - MARGIN * 2;
+        boolean isHorizontal = (width > height);
+
+        Rect bounds = null;
+        if ( isHorizontal )
+            bounds = new Rect(MARGIN, 0, MARGIN + width, d.getIntrinsicHeight());
+        else
+            bounds = new Rect(0, MARGIN, d.getIntrinsicWidth(), MARGIN + height);
+
+        int beginning = MARGIN;
+        if ( !isHorizontal ) beginning += height;
         d.setBounds(bounds);
         d.draw(canvas);
         if (mFullValue != 0) {
             for (Category c : categories) {
                 long value = (timer == null ? c.value : c.tmpValue);
-                int w = (int) (value * width / mFullValue);
-                if (w == 0)
-                    continue;
-                bounds.left = left;
-                bounds.right = left + w;
-                d = getDrawable(c.resImg);
-                bounds.bottom = bounds.top + d.getIntrinsicHeight();
-                d.setBounds(bounds);
-                d.draw(canvas);
-                left += w;
+                if ( isHorizontal ) {
+                    int w = (int) (value * width / mFullValue);
+                    if (w == 0)
+                        continue;
+                    bounds.left = beginning;
+                    bounds.right = beginning + w;
+                    d = getDrawable(c.resImg);
+                    bounds.bottom = bounds.top + d.getIntrinsicHeight();
+                    d.setBounds(bounds);
+                    d.draw(canvas);
+                    beginning += w;
+                }
+                else {
+                    int h = (int) (value * height / mFullValue);
+                    if (h == 0)
+                        continue;
+                    bounds.bottom = beginning;
+                    bounds.top = beginning - h;
+                    d = getDrawable(c.resImg);
+                    bounds.right = bounds.left + d.getIntrinsicWidth();
+                    d.setBounds(bounds);
+                    d.draw(canvas);
+                    beginning -= h;
+                }
             }
         }
-        bounds.left = 0;
-        bounds.right = bounds.left + getWidth();
+        if ( isHorizontal ) {
+            bounds.left = 0;
+            bounds.right = bounds.left + getWidth();
+        }
+        else {
+            bounds.top = 0;
+            bounds.bottom = bounds.top + getHeight();
+        }
         d = getDrawable(R.drawable.category_bar_mask);
         d.setBounds(bounds);
         d.draw(canvas);
