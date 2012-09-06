@@ -41,7 +41,8 @@
         android:uiOptions="splitActionBarWhenNarrow">
         <activity
             android:name=".FileExplorerTabActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:configChanges="screenSize|keyboardHidden"
+            android:screenOrientation="sensor"
             android:uiOptions="splitActionBarWhenNarrow">
             <intent-filter >
                 <action android:name="android.intent.action.MAIN" />
