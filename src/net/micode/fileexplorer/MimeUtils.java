@@ -342,6 +342,7 @@ public final class MimeUtils {
         add("video/quicktime", "qt");
         add("video/quicktime", "mov");
         add("video/vnd.mpegurl", "mxu");
+        add("video/webm", "webm");
         add("video/x-la-asf", "lsf");
         add("video/x-la-asf", "lsx");
         add("video/x-mng", "mng");
