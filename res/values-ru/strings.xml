@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <string name="added_favorite">Добавлено в избранное</string>
+    <string name="app_name">File Explorer</string>
+    <string name="cancel">Отмена</string>
+    <string name="category_all">Все</string>
+    <string name="category_apk">APKs</string>
+    <string name="category_document">Документы</string>
+    <string name="category_favorite">Избранное</string>
+    <string name="category_music">Музыка</string>
+    <string name="category_other">Остальное</string>
+    <string name="category_picture">Картинки</string>
+    <string name="category_theme">Темы</string>
+    <string name="category_video">Видео</string>
+    <string name="category_zip">Zips</string>
+    <string name="confirm">OK</string>
+    <string name="confirm_know">OK</string>
+    <string name="enable_sd_card">SD карта не обнаружена, вставьте карту</string>
+    <string name="error_info_cant_send_folder">Невозможно отправить папку</string>
+    <string name="fail_to_create_folder">Не удалось создать папку, папка уже существует</string>
+    <string name="fail_to_rename">Не удалось переименовать фаил или папку, такой фаил или папка уже существует</string>
+    <string name="file_info_canread">Чтение:</string>
+    <string name="file_info_canwrite">Запись:</string>
+    <string name="file_info_ishidden">Скрытый:</string>
+    <string name="file_info_location">Путь:</string>
+    <string name="file_info_modified">Модифицирован:</string>
+    <string name="file_info_size">размер:</string>
+    <string name="file_size">%d Байт</string>
+    <string name="install_failed">Установка не удалась</string>
+    <string name="install_successful">Установка завершена</string>
+    <string name="instruction">Введите адрес в адресную строку FTP-клиента:</string>
+    <string name="instruction_pre">Включить службу для активации FTP-сервера</string>
+    <string name="menu_item_search">Поиск</string>
+    <string name="menu_item_sort">Сортировать</string>
+    <string name="menu_item_sort_date">Дата</string>
+    <string name="menu_item_sort_name">Имя</string>
+    <string name="menu_item_sort_size">Размер</string>
+    <string name="menu_item_sort_type">Тип</string>
+    <string name="new_folder_name">Новая папка</string>
+    <string name="no">Нет</string>
+    <string name="no_file">Нет файлов</string>
+    <string name="no_wifi">Нет Wi-Fi сети</string>
+    <string name="no_wifi_hint">Нет Wi-Fi сети, проверьте настройки WiFi</string>
+    <string name="notif_server_starting">FTP сервер запущен</string>
+    <string name="notif_title">FTP сервер</string>
+    <string name="operation_cancel">Отмена</string>
+    <string name="operation_cancel_selectall">Отменить выбранное</string>
+    <string name="operation_copy">Копировать</string>
+    <string name="operation_copy_path">Копировать путь файла</string>
+    <string name="operation_create_folder">Новая папка</string>
+    <string name="operation_create_folder_message">Введите название папки</string>
+    <string name="operation_delete">Удалить</string>
+    <string name="operation_delete_confirm_message">Подтверждение удаления?</string>
+    <string name="operation_deleting">Удаляем</string>
+    <string name="operation_favorite">Добавить в избранное</string>
+    <string name="operation_hide_sys">Не отображать скрытые файлы</string>
+    <string name="operation_info">Детали</string>
+    <string name="operation_move">Переместить</string>
+    <string name="operation_moving">Перемещяем</string>
+    <string name="operation_paste">Вставить</string>
+    <string name="operation_pasting">Вставляем</string>
+    <string name="operation_refresh">Обновить</string>
+    <string name="operation_rename">Переименовать</string>
+    <string name="operation_rename_message">Введите новое имя</string>
+    <string name="operation_selectall">Выбрать все</string>
+    <string name="operation_send">Отправить</string>
+    <string name="operation_show_sys">Показывать скрытые файлы</string>
+    <string name="operation_unfavorite">Удалить из избранного</string>
+    <string name="removed_favorite">Удален из избранного</string>
+    <string name="sd_card_available">Места доступно:<xliff:g id="available_size">%1$s</xliff:g></string>
+    <string name="sd_card_size">SD карта:<xliff:g id="total_size">%1$s</xliff:g></string>
+    <string name="sd_folder">SD карта</string>
+    <string name="search_hint">Поиск файлов</string>
+    <string name="search_title">Поиск файлов</string>
+    <string name="start_server">Запустить службу</string>
+    <string name="stop_server">Остановить службу</string>
+    <string name="storage_warning">Внешние накопители отсутствуют или не могут быть прочитаны</string>
+    <string name="tab_category">Обзор</string>
+    <string name="tab_remote">FTP</string>
+    <string name="tab_sd">File</string>
+    <string name="wifi_state">WLAN статус</string>
+    <string name="yes">Да</string>
+    <string name="dialog_select_type">Выделить файлы по типу</string>
+    <string name="dialog_type_text">Текст</string>
+    <string name="dialog_type_audio">Аудио</string>
+    <string name="dialog_type_video">Видео</string>
+    <string name="dialog_type_image">Картинки</string>
+    <string name="favorite_photo">Фото</string>
+    <string name="favorite_sdcard">SD карта</string>
+    <string name="favourite_root">Root</string><string name="favorite_screen_cap">MIUI Screen Shot</string>
+    <string name="favorite_ringtone">Рингтоны</string>
+    <string name="multi_select_title">Выбраны <xliff:g id="number">%1$s</xliff:g> item(s)</string>
+    <string name="menu_setting">Настройки</string>
+    <string name="menu_exit">Выход</string>
+    <string name="preference_title">Основные настройки</string>
+    <string name="pref_primary_folder">Домашняя папка</string>
+    <string name="pref_read_root">Чтение root</string>
+    <string name="pref_show_real_path">Отобразить реальный путь</string>
+    <string name="default_primary_folder">/mnt/sdcard</string>
+    <string name="pref_primary_folder_summary">Папка, которая появляется при запуске приложения <xliff:g id="string">%1$s</xliff:g></string>
+    <string name="pref_show_real_path_summary">Показать реальный путь в панели навигации</string>
+
+</resources>
