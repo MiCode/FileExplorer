@@ -27,6 +27,7 @@ public class Globals {
     private static Context context;
     private static String lastError;
     private static File chrootDir = new File(Defaults.chrootDir);
+    private static File primaryDir = chrootDir;    // added by Nova, set primary directory for ftp user.
     private static ProxyConnector proxyConnector = null;
     private static String username = null;
 
@@ -50,6 +51,31 @@ public class Globals {
     public static void setChrootDir(File chrootDir) {
         if(chrootDir.isDirectory()) {
             Globals.chrootDir = chrootDir;
+            Globals.primaryDir = chrootDir;
+        }
+    }
+
+    /** Get primary directory for ftp user.
+     */
+    public static File getPrimaryDir() {
+        return primaryDir;
+    }
+
+    /** Set primary directory for ftp user. when root directory is "/", we can change the primary directory of ftp user by setting this value.
+     *  Notes:
+     *   1. It must be invoked after setChrootDir.
+     *   2. Globals.primaryDir must be subdirectory of Globals.chrootDir.
+     */
+    public static void setPrimaryDir(File dir) {
+        if (dir.isDirectory()) {
+            try {
+                if (dir.getCanonicalPath().startsWith(Globals.getChrootDir().getPath())) {
+                    Globals.primaryDir = dir; // the primary directory name must begin with the Globals.chrootDir.
+                }
+                return ;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

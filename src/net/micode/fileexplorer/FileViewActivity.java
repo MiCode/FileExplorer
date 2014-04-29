@@ -20,6 +20,7 @@
 package net.micode.fileexplorer;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -174,6 +175,14 @@ public class FileViewActivity extends Fragment implements
                 currentDir = uri.getPath();
             }
         }
+
+        // added by Nova, for root path checking.
+        try {
+            currentDir = new File(currentDir).getCanonicalPath();
+        } catch (IOException e) {
+            Log.d(LOG_TAG, "fail to get CanonicalPath, currentDir = " + currentDir);
+        }
+
         mFileViewInteractionHub.setCurrentPath(currentDir);
         Log.i(LOG_TAG, "CurrentDir = " + currentDir);
 

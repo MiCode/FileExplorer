@@ -20,6 +20,7 @@
 package net.micode.fileexplorer;
 
 import java.io.File;
+import java.io.IOException;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -104,7 +105,22 @@ public class FileExplorerPreferenceActivity extends PreferenceActivity implement
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
 
         boolean isReadRootFromSetting = settings.getBoolean(READ_ROOT, false);
-        boolean isReadRootWhenSettingPrimaryFolderWithoutSdCardPrefix = !getPrimaryFolder(context).startsWith(Util.getSdDirectory());
+        boolean isReadRootWhenSettingPrimaryFolderWithoutSdCardPrefix;
+
+        /*  Modified by Nova, fix a bug.
+         *  In huawei p6, Util.getSdDirectory() returns "/storage/emulated/0", primary folder is "/mnt/sdcard", they are the same,
+         *  it make isReadRootWhenSettingPrimaryFolderWithoutSdCardPrefix get a wrong value.
+         */
+        String primary, sd;
+        try {
+            primary = (new File(getPrimaryFolder(context))).getCanonicalPath();
+            sd = (new File(Util.getSdDirectory())).getCanonicalPath();
+        } catch (IOException e) {
+            e.printStackTrace();
+            primary = getPrimaryFolder(context);
+            sd = Util.getSdDirectory();
+        }
+        isReadRootWhenSettingPrimaryFolderWithoutSdCardPrefix = !primary.startsWith(sd);
 
         return isReadRootFromSetting || isReadRootWhenSettingPrimaryFolderWithoutSdCardPrefix;
     }

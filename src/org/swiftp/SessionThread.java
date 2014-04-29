@@ -45,7 +45,7 @@ public class SessionThread extends Thread {
     protected boolean binaryMode = false;
     protected Account account = new Account();
     protected boolean authenticated = false;
-    protected File workingDir = Globals.getChrootDir();
+    protected File workingDir = Globals.getPrimaryDir();
     // protected ServerSocket dataServerSocket = null;
     protected Socket dataSocket = null;
     // protected FTPServerService service;
@@ -247,7 +247,7 @@ public class SessionThread extends Thread {
 
     static int numNulls = 0;
     public void run() {
-        myLog.l(Log.INFO, "SessionThread started");
+        myLog.l(Log.INFO, "SessionThread started. root = " + Globals.getChrootDir() + ", primary dir = " + Globals.getPrimaryDir());
 
         if(sendWelcomeBanner) {
             writeString("220 SwiFTP " + Util.getVersion() + " ready\r\n");
