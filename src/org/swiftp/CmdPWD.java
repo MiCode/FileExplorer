@@ -43,7 +43,11 @@ public class CmdPWD extends FtpCmd implements Runnable {
             File workingDir = sessionThread.getWorkingDir();
             String currentDir = workingDir != null ? workingDir.getCanonicalPath() : Globals.getChrootDir()
                     .getCanonicalPath();
-            currentDir = currentDir.substring(Globals.getChrootDir().getCanonicalPath().length());
+
+            // modified by nova, if root path is "/", it requires special handling
+            if (!Globals.getChrootDir().getCanonicalPath().equals("/")) {
+                currentDir = currentDir.substring(Globals.getChrootDir().getCanonicalPath().length());
+            }
             // The root directory requires special handling to restore its
             // leading slash
             if (currentDir.length() == 0) {

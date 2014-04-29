@@ -246,7 +246,18 @@ public class ServerControlActivity extends Fragment implements IBackPressedListe
     OnClickListener startStopListener = new OnClickListener() {
         public void onClick(View v) {
             Globals.setLastError(null);
-            File chrootDir = new File(Defaults.chrootDir);
+
+            /*
+             *  check whether ftp user can access root path according to the settings.
+             *  added by Nova.
+             */
+            File chrootDir;
+            if (FileExplorerPreferenceActivity.isReadRoot(mActivity)) {
+                chrootDir = new File(GlobalConsts.ROOT_PATH);   // system root, "/"
+            } else {
+                chrootDir = new File(Defaults.chrootDir);   // sd home
+            }
+
             if (!chrootDir.isDirectory())
                 return;
 
@@ -254,6 +265,8 @@ public class ServerControlActivity extends Fragment implements IBackPressedListe
             Intent intent = new Intent(context, FTPServerService.class);
 
             Globals.setChrootDir(chrootDir);
+            Globals.setPrimaryDir(new File(Defaults.chrootDir));
+
             if (!FTPServerService.isRunning()) {
                 warnIfNoExternalStorage();
                 if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
