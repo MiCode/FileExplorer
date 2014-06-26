@@ -264,6 +264,8 @@ public class FileOperationHelper {
                 destFile = new File(destPath);
             }
 
+            destFile.mkdirs();// 修复不能复制空文件夹的bug
+            
             for (File child : file.listFiles(mFilter)) {
                 if (!child.isHidden() && Util.isNormalFile(child.getAbsolutePath())) {
                     CopyFile(Util.GetFileInfo(child, mFilter, Settings.instance().getShowDotAndHiddenFiles()), destPath);

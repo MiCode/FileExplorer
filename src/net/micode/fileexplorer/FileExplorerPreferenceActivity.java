@@ -25,22 +25,25 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
 /**
- *
+ * 
  * @author ShunLi
  */
-public class FileExplorerPreferenceActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener {
+public class FileExplorerPreferenceActivity extends PreferenceActivity
+        implements OnSharedPreferenceChangeListener {
     private static final String PRIMARY_FOLDER = "pref_key_primary_folder";
     private static final String READ_ROOT = "pref_key_read_root";
     private static final String SHOW_REAL_PATH = "pref_key_show_real_path";
     private static final String SYSTEM_SEPARATOR = File.separator;
 
     private EditTextPreference mEditTextPreference;
+    private CheckBoxPreference mCheckBoxPreferenceShowRealPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +51,9 @@ public class FileExplorerPreferenceActivity extends PreferenceActivity implement
         addPreferencesFromResource(R.xml.preferences);
 
         mEditTextPreference = (EditTextPreference) findPreference(PRIMARY_FOLDER);
+        mCheckBoxPreferenceShowRealPath = (CheckBoxPreference) findPreference(SHOW_REAL_PATH);
+        mCheckBoxPreferenceShowRealPath.setEnabled(getPreferenceScreen()
+                .getSharedPreferences().getBoolean(READ_ROOT, false));
     }
 
     @Override
@@ -55,11 +61,12 @@ public class FileExplorerPreferenceActivity extends PreferenceActivity implement
         super.onResume();
 
         // Setup the initial values
-        SharedPreferences sharedPreferences = getPreferenceScreen().getSharedPreferences();
+        SharedPreferences sharedPreferences = getPreferenceScreen()
+                .getSharedPreferences();
 
         mEditTextPreference.setSummary(this.getString(
-                R.string.pref_primary_folder_summary,
-                sharedPreferences.getString(PRIMARY_FOLDER, GlobalConsts.ROOT_PATH)));
+                R.string.pref_primary_folder_summary, sharedPreferences
+                        .getString(PRIMARY_FOLDER, GlobalConsts.ROOT_PATH)));
 
         // Set up a listener whenever a key changes
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
@@ -70,30 +77,48 @@ public class FileExplorerPreferenceActivity extends PreferenceActivity implement
         super.onPause();
 
         // Unregister the listener whenever a key changes
-        getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
+        getPreferenceScreen().getSharedPreferences()
+                .unregisterOnSharedPreferenceChangeListener(this);
     }
 
     @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedpreferences, String key) {
+    public void onSharedPreferenceChanged(SharedPreferences sharedpreferences,
+            String key) {
         if (PRIMARY_FOLDER.equals(key)) {
-            mEditTextPreference.setSummary(this.getString(
-                    R.string.pref_primary_folder_summary,
-                    sharedpreferences.getString(PRIMARY_FOLDER, GlobalConsts.ROOT_PATH)));
+            mEditTextPreference
+                    .setSummary(this.getString(
+                            R.string.pref_primary_folder_summary,
+                            sharedpreferences.getString(PRIMARY_FOLDER,
+                                    GlobalConsts.ROOT_PATH)));
+        } else if (READ_ROOT.equals(key)) {
+            // sharedpreferences.getBoolean(READ_ROOT, false)
+            mCheckBoxPreferenceShowRealPath.setEnabled(sharedpreferences
+                    .getBoolean(READ_ROOT, false));
         }
     }
 
     public static String getPrimaryFolder(Context context) {
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
-        String primaryFolder = settings.getString(PRIMARY_FOLDER, context.getString(R.string.default_primary_folder, GlobalConsts.ROOT_PATH));
+        SharedPreferences settings = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        String primaryFolder = settings.getString(PRIMARY_FOLDER, context
+                .getString(R.string.default_primary_folder,
+                        GlobalConsts.ROOT_PATH));
 
-        if (TextUtils.isEmpty(primaryFolder)) { // setting primary folder = empty("")
+        if (TextUtils.isEmpty(primaryFolder)) { // setting primary folder =
+                                                // empty("")
             primaryFolder = GlobalConsts.ROOT_PATH;
         }
 
-        // it's remove the end char of the home folder setting when it with the '/' at the end.
-        // if has the backslash at end of the home folder, it's has minor bug at "UpLevel" function.
+        // it's remove the end char of the home folder setting when it with the
+        // '/' at the end.
+        // if has the backslash at end of the home folder, it's has minor bug at
+        // "UpLevel" function.
         int length = primaryFolder.length();
-        if (length > 1 && SYSTEM_SEPARATOR.equals(primaryFolder.substring(length - 1))) { // length = 1, ROOT_PATH
+        if (length > 1
+                && SYSTEM_SEPARATOR.equals(primaryFolder.substring(length - 1))) { // length
+                                                                                   // =
+                                                                                   // 1,
+                                                                                   // ROOT_PATH
             return primaryFolder.substring(0, length - 1);
         } else {
             return primaryFolder;
@@ -101,17 +126,22 @@ public class FileExplorerPreferenceActivity extends PreferenceActivity implement
     }
 
     public static boolean isReadRoot(Context context) {
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences settings = PreferenceManager
+                .getDefaultSharedPreferences(context);
 
         boolean isReadRootFromSetting = settings.getBoolean(READ_ROOT, false);
-        boolean isReadRootWhenSettingPrimaryFolderWithoutSdCardPrefix = !getPrimaryFolder(context).startsWith(Util.getSdDirectory());
+        boolean isReadRootWhenSettingPrimaryFolderWithoutSdCardPrefix = !getPrimaryFolder(
+                context).startsWith(Util.getSdDirectory());
 
-        return isReadRootFromSetting || isReadRootWhenSettingPrimaryFolderWithoutSdCardPrefix;
+        return isReadRootFromSetting
+                || isReadRootWhenSettingPrimaryFolderWithoutSdCardPrefix;
     }
-    
+
     public static boolean showRealPath(Context context) {
-    	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
-    	return settings.getBoolean(SHOW_REAL_PATH, false);
+        SharedPreferences settings = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        return settings.getBoolean(SHOW_REAL_PATH, false)
+                && isReadRoot(context);
     }
 
 }

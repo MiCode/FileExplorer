@@ -21,6 +21,7 @@ package net.micode.fileexplorer;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Stack;
 
 import android.R.drawable;
 import android.app.AlertDialog;
@@ -87,6 +88,8 @@ public class FileViewInteractionHub implements IOperationProgressListener {
 
     private Context mContext;
 
+    private Stack<String> mFolderHistroyStack;
+
     public enum Mode {
         View, Pick
     };
@@ -98,6 +101,7 @@ public class FileViewInteractionHub implements IOperationProgressListener {
         mFileOperationHelper = new FileOperationHelper(this);
         mFileSortHelper = new FileSortHelper();
         mContext = mFileViewListener.getContext();
+        mFolderHistroyStack = new Stack<String>();
     }
 
     private void showProgress(String msg) {
@@ -168,7 +172,8 @@ public class FileViewInteractionHub implements IOperationProgressListener {
     }
 
     public boolean isMoveState() {
-        return mFileOperationHelper.isMoveState() || mFileOperationHelper.canPaste();
+        return mFileOperationHelper.isMoveState()
+                || mFileOperationHelper.canPaste();
     }
 
     private void setup() {
@@ -179,25 +184,30 @@ public class FileViewInteractionHub implements IOperationProgressListener {
 
     private void setupNaivgationBar() {
         mNavigationBar = mFileViewListener.getViewById(R.id.navigation_bar);
-        mNavigationBarText = (TextView) mFileViewListener.getViewById(R.id.current_path_view);
-        mNavigationBarUpDownArrow = (ImageView) mFileViewListener.getViewById(R.id.path_pane_arrow);
+        mNavigationBarText = (TextView) mFileViewListener
+                .getViewById(R.id.current_path_view);
+        mNavigationBarUpDownArrow = (ImageView) mFileViewListener
+                .getViewById(R.id.path_pane_arrow);
         View clickable = mFileViewListener.getViewById(R.id.current_path_pane);
         clickable.setOnClickListener(buttonClick);
 
-        mDropdownNavigation = mFileViewListener.getViewById(R.id.dropdown_navigation);
+        mDropdownNavigation = mFileViewListener
+                .getViewById(R.id.dropdown_navigation);
 
         setupClick(mNavigationBar, R.id.path_pane_up_level);
     }
 
     // buttons
     private void setupOperationPane() {
-        mConfirmOperationBar = mFileViewListener.getViewById(R.id.moving_operation_bar);
+        mConfirmOperationBar = mFileViewListener
+                .getViewById(R.id.moving_operation_bar);
         setupClick(mConfirmOperationBar, R.id.button_moving_confirm);
         setupClick(mConfirmOperationBar, R.id.button_moving_cancel);
     }
 
     private void setupClick(View v, int id) {
-        View button = (v != null ? v.findViewById(id) : mFileViewListener.getViewById(id));
+        View button = (v != null ? v.findViewById(id) : mFileViewListener
+                .getViewById(id));
         if (button != null)
             button.setOnClickListener(buttonClick);
     }
@@ -206,37 +216,38 @@ public class FileViewInteractionHub implements IOperationProgressListener {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-                case R.id.button_operation_copy:
-                    onOperationCopy();
-                    break;
-                case R.id.button_operation_move:
-                    onOperationMove();
-                    break;
-                case R.id.button_operation_send:
-                    onOperationSend();
-                    break;
-                case R.id.button_operation_delete:
-                    onOperationDelete();
-                    break;
-                case R.id.button_operation_cancel:
-                    onOperationSelectAllOrCancel();
-                    break;
-                case R.id.current_path_pane:
-                    onNavigationBarClick();
-                    break;
-                case R.id.button_moving_confirm:
-                    onOperationButtonConfirm();
-                    break;
-                case R.id.button_moving_cancel:
-                    onOperationButtonCancel();
-                    break;
-                case R.id.path_pane_up_level:
-                    onOperationUpLevel();
-                    ActionMode mode = ((FileExplorerTabActivity) mContext).getActionMode();
-                    if (mode != null) {
-                        mode.finish();
-                    }
-                    break;
+            case R.id.button_operation_copy:
+                onOperationCopy();
+                break;
+            case R.id.button_operation_move:
+                onOperationMove();
+                break;
+            case R.id.button_operation_send:
+                onOperationSend();
+                break;
+            case R.id.button_operation_delete:
+                onOperationDelete();
+                break;
+            case R.id.button_operation_cancel:
+                onOperationSelectAllOrCancel();
+                break;
+            case R.id.current_path_pane:
+                onNavigationBarClick();
+                break;
+            case R.id.button_moving_confirm:
+                onOperationButtonConfirm();
+                break;
+            case R.id.button_moving_cancel:
+                onOperationButtonCancel();
+                break;
+            case R.id.path_pane_up_level:
+                onOperationUpLevel(false);
+                ActionMode mode = ((FileExplorerTabActivity) mContext)
+                        .getActionMode();
+                if (mode != null) {
+                    mode.finish();
+                }
+                break;
             }
         }
 
@@ -257,7 +268,8 @@ public class FileViewInteractionHub implements IOperationProgressListener {
     }
 
     private void onOperationSetting() {
-        Intent intent = new Intent(mContext, FileExplorerPreferenceActivity.class);
+        Intent intent = new Intent(mContext,
+                FileExplorerPreferenceActivity.class);
         if (intent != null) {
             try {
                 mContext.startActivity(intent);
@@ -268,7 +280,8 @@ public class FileViewInteractionHub implements IOperationProgressListener {
     }
 
     private void onOperationFavorite(String path) {
-        FavoriteDatabaseHelper databaseHelper = FavoriteDatabaseHelper.getInstance();
+        FavoriteDatabaseHelper databaseHelper = FavoriteDatabaseHelper
+                .getInstance();
         if (databaseHelper != null) {
             int stringId = 0;
             if (databaseHelper.isFavorite(path)) {
@@ -284,7 +297,8 @@ public class FileViewInteractionHub implements IOperationProgressListener {
     }
 
     private void onOperationShowSysFiles() {
-        Settings.instance().setShowDotAndHiddenFiles(!Settings.instance().getShowDotAndHiddenFiles());
+        Settings.instance().setShowDotAndHiddenFiles(
+                !Settings.instance().getShowDotAndHiddenFiles());
         refreshFileList();
     }
 
@@ -305,11 +319,39 @@ public class FileViewInteractionHub implements IOperationProgressListener {
         FileExplorerTabActivity fileExplorerTabActivity = (FileExplorerTabActivity) mContext;
         ActionMode mode = fileExplorerTabActivity.getActionMode();
         if (mode == null) {
-            mode = fileExplorerTabActivity.startActionMode(new ModeCallback(mContext, this));
+            mode = fileExplorerTabActivity.startActionMode(new ModeCallback(
+                    mContext, this));
             fileExplorerTabActivity.setActionMode(mode);
-            Util.updateActionModeTitle(mode, mContext, getSelectedFileList().size());
+            Util.updateActionModeTitle(mode, mContext, getSelectedFileList()
+                    .size());
         }
         mFileViewListener.onDataChanged();
+    }
+
+    public void jump2Folder(String path) {
+        if (mCurrentPath != path) {// 判断是否应该将当前路径添加到历史堆栈中
+            mFolderHistroyStack.add(mCurrentPath.isEmpty() ? mRoot
+                    : mCurrentPath);
+        }
+        mCurrentPath = path;
+        refreshFileList();
+    }
+
+    /*
+     * 返回上一个文件夹当存在上一个浏览过的文件夹时返回true，当已经是最初浏览的文件夹时返回false(用以判断是否该退出)
+     * 新增加了判断是否属于合法路径的判断，用以在变更设置时(是否浏览root目录等)自动过滤掉不该显示的目录
+     */
+    private boolean folderReturn() {
+        String path = null;
+        while (!mFolderHistroyStack.empty()) {
+            path = mFolderHistroyStack.pop();
+            if (path.startsWith(mRoot)) {
+                mCurrentPath = path;
+                refreshFileList();
+                return true;
+            }
+        }
+        return false;
     }
 
     private OnClickListener navigationClick = new OnClickListener() {
@@ -322,12 +364,7 @@ public class FileViewInteractionHub implements IOperationProgressListener {
             if (mFileViewListener.onNavigation(path))
                 return;
 
-            if(path.isEmpty()){
-                mCurrentPath = mRoot;
-            } else{
-                mCurrentPath = path;
-            }
-            refreshFileList();
+            jump2Folder(path.isEmpty() ? mRoot : path);
         }
 
     };
@@ -336,35 +373,41 @@ public class FileViewInteractionHub implements IOperationProgressListener {
         if (mDropdownNavigation.getVisibility() == View.VISIBLE) {
             showDropdownNavigation(false);
         } else {
-            LinearLayout list = (LinearLayout) mDropdownNavigation.findViewById(R.id.dropdown_navigation_list);
+            LinearLayout list = (LinearLayout) mDropdownNavigation
+                    .findViewById(R.id.dropdown_navigation_list);
             list.removeAllViews();
             int pos = 0;
             String displayPath = mFileViewListener.getDisplayPath(mCurrentPath);
             boolean root = true;
             int left = 0;
-            while (pos != -1 && !displayPath.equals("/")) {//如果当前位置在根文件夹则不显示导航条
+            while (pos != -1 && !displayPath.equals("/")) {// 如果当前位置在根文件夹则不显示导航条
                 int end = displayPath.indexOf("/", pos);
                 if (end == -1)
                     break;
 
-                View listItem = LayoutInflater.from(mContext).inflate(R.layout.dropdown_item,
-                        null);
+                View listItem = LayoutInflater.from(mContext).inflate(
+                        R.layout.dropdown_item, null);
 
                 View listContent = listItem.findViewById(R.id.list_item);
                 listContent.setPadding(left, 0, 0, 0);
                 left += 20;
-                ImageView img = (ImageView) listItem.findViewById(R.id.item_icon);
+                ImageView img = (ImageView) listItem
+                        .findViewById(R.id.item_icon);
 
-                img.setImageResource(root ? R.drawable.dropdown_icon_root : R.drawable.dropdown_icon_folder);
+                img.setImageResource(root ? R.drawable.dropdown_icon_root
+                        : R.drawable.dropdown_icon_folder);
                 root = false;
 
-                TextView text = (TextView) listItem.findViewById(R.id.path_name);
+                TextView text = (TextView) listItem
+                        .findViewById(R.id.path_name);
                 String substring = displayPath.substring(pos, end);
-                if(substring.isEmpty())substring = "/";
+                if (substring.isEmpty())
+                    substring = "/";
                 text.setText(substring);
 
                 listItem.setOnClickListener(navigationClick);
-                listItem.setTag(mFileViewListener.getRealPath(displayPath.substring(0, end)));
+                listItem.setTag(mFileViewListener.getRealPath(displayPath
+                        .substring(0, end)));
                 pos = end + 1;
                 list.addView(listItem);
             }
@@ -374,26 +417,31 @@ public class FileViewInteractionHub implements IOperationProgressListener {
         }
     }
 
-    public boolean onOperationUpLevel() {
+    public boolean onOperationUpLevel(boolean isreturn) {
         showDropdownNavigation(false);
 
         if (mFileViewListener.onOperation(GlobalConsts.OPERATION_UP_LEVEL)) {
             return true;
         }
 
-        if (!mRoot.equals(mCurrentPath)) {
-            mCurrentPath = new File(mCurrentPath).getParent();
-            refreshFileList();
-            return true;
+        if (isreturn) {// 真正的后退动作
+            return folderReturn();
+        } else {// 返回上一级文件夹
+            if (!mRoot.equals(mCurrentPath)) {
+                jump2Folder(new File(mCurrentPath).getParent());
+                return true;
+            }
         }
 
         return false;
     }
 
     public void onOperationCreateFolder() {
-        TextInputDialog dialog = new TextInputDialog(mContext, mContext.getString(
-                R.string.operation_create_folder), mContext.getString(R.string.operation_create_folder_message),
-                mContext.getString(R.string.new_folder_name), new OnFinishListener() {
+        TextInputDialog dialog = new TextInputDialog(mContext,
+                mContext.getString(R.string.operation_create_folder),
+                mContext.getString(R.string.operation_create_folder_message),
+                mContext.getString(R.string.new_folder_name),
+                new OnFinishListener() {
                     @Override
                     public boolean onFinish(String text) {
                         return doCreateFolder(text);
@@ -408,10 +456,13 @@ public class FileViewInteractionHub implements IOperationProgressListener {
             return false;
 
         if (mFileOperationHelper.CreateFolder(mCurrentPath, text)) {
-            mFileViewListener.addSingleFile(Util.GetFileInfo(Util.makePath(mCurrentPath, text)));
+            mFileViewListener.addSingleFile(Util.GetFileInfo(Util.makePath(
+                    mCurrentPath, text)));
             mFileListView.setSelection(mFileListView.getCount() - 1);
         } else {
-            new AlertDialog.Builder(mContext).setMessage(mContext.getString(R.string.fail_to_create_folder))
+            new AlertDialog.Builder(mContext)
+                    .setMessage(
+                            mContext.getString(R.string.fail_to_create_folder))
                     .setPositiveButton(R.string.confirm, null).create().show();
             return false;
         }
@@ -439,7 +490,8 @@ public class FileViewInteractionHub implements IOperationProgressListener {
         clearSelection();
 
         showConfirmOperationBar(true);
-        View confirmButton = mConfirmOperationBar.findViewById(R.id.button_moving_confirm);
+        View confirmButton = mConfirmOperationBar
+                .findViewById(R.id.button_moving_confirm);
         confirmButton.setEnabled(false);
         // refresh to hide selected files
         refreshFileList();
@@ -453,8 +505,8 @@ public class FileViewInteractionHub implements IOperationProgressListener {
     }
 
     private void copy(CharSequence text) {
-        ClipboardManager cm = (ClipboardManager) mContext.getSystemService(
-                Context.CLIPBOARD_SERVICE);
+        ClipboardManager cm = (ClipboardManager) mContext
+                .getSystemService(Context.CLIPBOARD_SERVICE);
         cm.setText(text);
     }
 
@@ -468,7 +520,8 @@ public class FileViewInteractionHub implements IOperationProgressListener {
         mFileOperationHelper.StartMove(getSelectedFileList());
         clearSelection();
         showConfirmOperationBar(true);
-        View confirmButton = mConfirmOperationBar.findViewById(R.id.button_moving_confirm);
+        View confirmButton = mConfirmOperationBar
+                .findViewById(R.id.button_moving_confirm);
         confirmButton.setEnabled(false);
         // refresh to hide selected files
         refreshFileList();
@@ -490,13 +543,15 @@ public class FileViewInteractionHub implements IOperationProgressListener {
         if (mConfirmOperationBar.getVisibility() == View.GONE)
             return;
 
-        Button confirmButton = (Button) mConfirmOperationBar.findViewById(R.id.button_moving_confirm);
+        Button confirmButton = (Button) mConfirmOperationBar
+                .findViewById(R.id.button_moving_confirm);
         int text = R.string.operation_paste;
         if (isSelectingFiles()) {
             confirmButton.setEnabled(mCheckedFileNameList.size() != 0);
             text = R.string.operation_send;
         } else if (isMoveState()) {
-            confirmButton.setEnabled(mFileOperationHelper.canMove(mCurrentPath));
+            confirmButton
+                    .setEnabled(mFileOperationHelper.canMove(mCurrentPath));
         }
 
         confirmButton.setText(text);
@@ -504,20 +559,24 @@ public class FileViewInteractionHub implements IOperationProgressListener {
 
     private void updateNavigationPane() {
         View upLevel = mFileViewListener.getViewById(R.id.path_pane_up_level);
-        upLevel.setVisibility(mRoot.equals(mCurrentPath) ? View.INVISIBLE : View.VISIBLE);
+        upLevel.setVisibility(mRoot.equals(mCurrentPath) ? View.INVISIBLE
+                : View.VISIBLE);
 
         View arrow = mFileViewListener.getViewById(R.id.path_pane_arrow);
-        arrow.setVisibility(mRoot.equals(mCurrentPath) ? View.GONE : View.VISIBLE);
+        arrow.setVisibility(mRoot.equals(mCurrentPath) ? View.GONE
+                : View.VISIBLE);
 
-        mNavigationBarText.setText(mFileViewListener.getDisplayPath(mCurrentPath));
+        mNavigationBarText.setText(mFileViewListener
+                .getDisplayPath(mCurrentPath));
     }
 
     public void onOperationSend() {
         ArrayList<FileInfo> selectedFileList = getSelectedFileList();
         for (FileInfo f : selectedFileList) {
             if (f.IsDir) {
-                AlertDialog dialog = new AlertDialog.Builder(mContext).setMessage(
-                        R.string.error_info_cant_send_folder).setPositiveButton(R.string.confirm, null).create();
+                AlertDialog dialog = new AlertDialog.Builder(mContext)
+                        .setMessage(R.string.error_info_cant_send_folder)
+                        .setPositiveButton(R.string.confirm, null).create();
                 dialog.show();
                 return;
             }
@@ -545,8 +604,10 @@ public class FileViewInteractionHub implements IOperationProgressListener {
         final FileInfo f = getSelectedFileList().get(0);
         clearSelection();
 
-        TextInputDialog dialog = new TextInputDialog(mContext, mContext.getString(R.string.operation_rename),
-                mContext.getString(R.string.operation_rename_message), f.fileName, new OnFinishListener() {
+        TextInputDialog dialog = new TextInputDialog(mContext,
+                mContext.getString(R.string.operation_rename),
+                mContext.getString(R.string.operation_rename_message),
+                f.fileName, new OnFinishListener() {
                     @Override
                     public boolean onFinish(String text) {
                         return doRename(f, text);
@@ -565,7 +626,8 @@ public class FileViewInteractionHub implements IOperationProgressListener {
             f.fileName = text;
             mFileViewListener.onDataChanged();
         } else {
-            new AlertDialog.Builder(mContext).setMessage(mContext.getString(R.string.fail_to_rename))
+            new AlertDialog.Builder(mContext)
+                    .setMessage(mContext.getString(R.string.fail_to_rename))
                     .setPositiveButton(R.string.confirm, null).create().show();
             return false;
         }
@@ -580,9 +642,12 @@ public class FileViewInteractionHub implements IOperationProgressListener {
         final Intent intent;
         if (f.isDirectory()) {
             intent = new Intent(Intent.ACTION_MEDIA_MOUNTED);
-            intent.setClassName("com.android.providers.media", "com.android.providers.media.MediaScannerReceiver");
-            intent.setData(Uri.fromFile(Environment.getExternalStorageDirectory()));
-            Log.v(LOG_TAG, "directory changed, send broadcast:" + intent.toString());
+            intent.setClassName("com.android.providers.media",
+                    "com.android.providers.media.MediaScannerReceiver");
+            intent.setData(Uri.fromFile(Environment
+                    .getExternalStorageDirectory()));
+            Log.v(LOG_TAG,
+                    "directory changed, send broadcast:" + intent.toString());
         } else {
             intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
             intent.setData(Uri.fromFile(new File(path)));
@@ -606,22 +671,30 @@ public class FileViewInteractionHub implements IOperationProgressListener {
     }
 
     private void doOperationDelete(final ArrayList<FileInfo> selectedFileList) {
-        final ArrayList<FileInfo> selectedFiles = new ArrayList<FileInfo>(selectedFileList);
+        final ArrayList<FileInfo> selectedFiles = new ArrayList<FileInfo>(
+                selectedFileList);
         Dialog dialog = new AlertDialog.Builder(mContext)
-                .setMessage(mContext.getString(R.string.operation_delete_confirm_message))
-                .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        if (mFileOperationHelper.Delete(selectedFiles)) {
-                            showProgress(mContext.getString(R.string.operation_deleting));
-                        }
-                        clearSelection();
-                    }
-                }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        clearSelection();
-                    }
-                }).create();
+                .setMessage(
+                        mContext.getString(R.string.operation_delete_confirm_message))
+                .setPositiveButton(R.string.confirm,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,
+                                    int whichButton) {
+                                if (mFileOperationHelper.Delete(selectedFiles)) {
+                                    showProgress(mContext
+                                            .getString(R.string.operation_deleting));
+                                }
+                                clearSelection();
+                            }
+                        })
+                .setNegativeButton(R.string.cancel,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                    int which) {
+                                clearSelection();
+                            }
+                        }).create();
         dialog.show();
     }
 
@@ -633,8 +706,8 @@ public class FileViewInteractionHub implements IOperationProgressListener {
         if (file == null)
             return;
 
-        InformationDialog dialog = new InformationDialog(mContext, file, mFileViewListener
-                .getFileIconHelper());
+        InformationDialog dialog = new InformationDialog(mContext, file,
+                mFileViewListener.getFileIconHelper());
         dialog.show();
         clearSelection();
     }
@@ -672,7 +745,8 @@ public class FileViewInteractionHub implements IOperationProgressListener {
     // context menu
     private OnCreateContextMenuListener mListViewContextMenuListener = new OnCreateContextMenuListener() {
         @Override
-        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+        public void onCreateContextMenu(ContextMenu menu, View v,
+                ContextMenuInfo menuInfo) {
             if (isInSelection() || isMoveState())
                 return;
 
@@ -680,7 +754,8 @@ public class FileViewInteractionHub implements IOperationProgressListener {
 
             AdapterContextMenuInfo info = (AdapterContextMenuInfo) menuInfo;
 
-            FavoriteDatabaseHelper databaseHelper = FavoriteDatabaseHelper.getInstance();
+            FavoriteDatabaseHelper databaseHelper = FavoriteDatabaseHelper
+                    .getInstance();
             FileInfo file = mFileViewListener.getItem(info.position);
             if (databaseHelper != null && file != null) {
                 int stringId = databaseHelper.isFavorite(file.filePath) ? R.string.operation_unfavorite
@@ -688,11 +763,14 @@ public class FileViewInteractionHub implements IOperationProgressListener {
                 addMenuItem(menu, GlobalConsts.MENU_FAVORITE, 0, stringId);
             }
 
-            addMenuItem(menu, GlobalConsts.MENU_COPY, 0, R.string.operation_copy);
-            addMenuItem(menu, GlobalConsts.MENU_COPY_PATH, 0, R.string.operation_copy_path);
+            addMenuItem(menu, GlobalConsts.MENU_COPY, 0,
+                    R.string.operation_copy);
+            addMenuItem(menu, GlobalConsts.MENU_COPY_PATH, 0,
+                    R.string.operation_copy_path);
             // addMenuItem(menu, GlobalConsts.MENU_PASTE, 0,
             // R.string.operation_paste);
-            addMenuItem(menu, GlobalConsts.MENU_MOVE, 0, R.string.operation_move);
+            addMenuItem(menu, GlobalConsts.MENU_MOVE, 0,
+                    R.string.operation_move);
             addMenuItem(menu, MENU_SEND, 0, R.string.operation_send);
             addMenuItem(menu, MENU_RENAME, 0, R.string.operation_rename);
             addMenuItem(menu, MENU_DELETE, 0, R.string.operation_delete);
@@ -712,12 +790,15 @@ public class FileViewInteractionHub implements IOperationProgressListener {
     private int mListViewContextMenuSelectedItem;
 
     private void setupFileListView() {
-        mFileListView = (ListView) mFileViewListener.getViewById(R.id.file_path_list);
+        mFileListView = (ListView) mFileViewListener
+                .getViewById(R.id.file_path_list);
         mFileListView.setLongClickable(true);
-        mFileListView.setOnCreateContextMenuListener(mListViewContextMenuListener);
+        mFileListView
+                .setOnCreateContextMenuListener(mListViewContextMenuListener);
         mFileListView.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view,
+                    int position, long id) {
                 onListItemClick(parent, view, position, id);
             }
         });
@@ -757,8 +838,10 @@ public class FileViewInteractionHub implements IOperationProgressListener {
 
         @Override
         public boolean onMenuItemClick(MenuItem item) {
-            AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
-            mListViewContextMenuSelectedItem = info != null ? info.position : -1;
+            AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
+                    .getMenuInfo();
+            mListViewContextMenuSelectedItem = info != null ? info.position
+                    : -1;
 
             int itemId = item.getItemId();
             if (mFileViewListener.onOperation(itemId)) {
@@ -768,74 +851,74 @@ public class FileViewInteractionHub implements IOperationProgressListener {
             addContextMenuSelectedItem();
 
             switch (itemId) {
-                case MENU_SEARCH:
-                    onOperationSearch();
-                    break;
-                case GlobalConsts.MENU_NEW_FOLDER:
-                    onOperationCreateFolder();
-                    break;
-                case MENU_REFRESH:
-                    onOperationReferesh();
-                    break;
-                case MENU_SELECTALL:
-                    onOperationSelectAllOrCancel();
-                    break;
-                case GlobalConsts.MENU_SHOWHIDE:
-                    onOperationShowSysFiles();
-                    break;
-                case GlobalConsts.MENU_FAVORITE:
-                    onOperationFavorite();
-                    break;
-                case MENU_SETTING:
-                    onOperationSetting();
-                    break;
-                case MENU_EXIT:
-                    ((FileExplorerTabActivity) mContext).finish();
-                    break;
-                // sort
-                case MENU_SORT_NAME:
-                    item.setChecked(true);
-                    onSortChanged(SortMethod.name);
-                    break;
-                case MENU_SORT_SIZE:
-                    item.setChecked(true);
-                    onSortChanged(SortMethod.size);
-                    break;
-                case MENU_SORT_DATE:
-                    item.setChecked(true);
-                    onSortChanged(SortMethod.date);
-                    break;
-                case MENU_SORT_TYPE:
-                    item.setChecked(true);
-                    onSortChanged(SortMethod.type);
-                    break;
+            case MENU_SEARCH:
+                onOperationSearch();
+                break;
+            case GlobalConsts.MENU_NEW_FOLDER:
+                onOperationCreateFolder();
+                break;
+            case MENU_REFRESH:
+                onOperationReferesh();
+                break;
+            case MENU_SELECTALL:
+                onOperationSelectAllOrCancel();
+                break;
+            case GlobalConsts.MENU_SHOWHIDE:
+                onOperationShowSysFiles();
+                break;
+            case GlobalConsts.MENU_FAVORITE:
+                onOperationFavorite();
+                break;
+            case MENU_SETTING:
+                onOperationSetting();
+                break;
+            case MENU_EXIT:
+                ((FileExplorerTabActivity) mContext).finish();
+                break;
+            // sort
+            case MENU_SORT_NAME:
+                item.setChecked(true);
+                onSortChanged(SortMethod.name);
+                break;
+            case MENU_SORT_SIZE:
+                item.setChecked(true);
+                onSortChanged(SortMethod.size);
+                break;
+            case MENU_SORT_DATE:
+                item.setChecked(true);
+                onSortChanged(SortMethod.date);
+                break;
+            case MENU_SORT_TYPE:
+                item.setChecked(true);
+                onSortChanged(SortMethod.type);
+                break;
 
-                case GlobalConsts.MENU_COPY:
-                    onOperationCopy();
-                    break;
-                case GlobalConsts.MENU_COPY_PATH:
-                    onOperationCopyPath();
-                    break;
-                case GlobalConsts.MENU_PASTE:
-                    onOperationPaste();
-                    break;
-                case GlobalConsts.MENU_MOVE:
-                    onOperationMove();
-                    break;
-                case MENU_SEND:
-                    onOperationSend();
-                    break;
-                case MENU_RENAME:
-                    onOperationRename();
-                    break;
-                case MENU_DELETE:
-                    onOperationDelete();
-                    break;
-                case MENU_INFO:
-                    onOperationInfo();
-                    break;
-                default:
-                    return false;
+            case GlobalConsts.MENU_COPY:
+                onOperationCopy();
+                break;
+            case GlobalConsts.MENU_COPY_PATH:
+                onOperationCopyPath();
+                break;
+            case GlobalConsts.MENU_PASTE:
+                onOperationPaste();
+                break;
+            case GlobalConsts.MENU_MOVE:
+                onOperationMove();
+                break;
+            case MENU_SEND:
+                onOperationSend();
+                break;
+            case MENU_RENAME:
+                onOperationRename();
+                break;
+            case MENU_DELETE:
+                onOperationDelete();
+                break;
+            case MENU_INFO:
+                onOperationInfo();
+                break;
+            default:
+                return false;
             }
 
             mListViewContextMenuSelectedItem = -1;
@@ -862,8 +945,8 @@ public class FileViewInteractionHub implements IOperationProgressListener {
         addMenuItem(menu, MENU_SELECTALL, 0, R.string.operation_selectall,
                 R.drawable.ic_menu_select_all);
 
-        SubMenu sortMenu = menu.addSubMenu(0, MENU_SORT, 1, R.string.menu_item_sort).setIcon(
-                R.drawable.ic_menu_sort);
+        SubMenu sortMenu = menu.addSubMenu(0, MENU_SORT, 1,
+                R.string.menu_item_sort).setIcon(R.drawable.ic_menu_sort);
         addMenuItem(sortMenu, MENU_SORT_NAME, 0, R.string.menu_item_sort_name);
         addMenuItem(sortMenu, MENU_SORT_SIZE, 1, R.string.menu_item_sort_size);
         addMenuItem(sortMenu, MENU_SORT_DATE, 2, R.string.menu_item_sort_date);
@@ -873,16 +956,18 @@ public class FileViewInteractionHub implements IOperationProgressListener {
 
         // addMenuItem(menu, GlobalConsts.MENU_PASTE, 2,
         // R.string.operation_paste);
-        addMenuItem(menu, GlobalConsts.MENU_NEW_FOLDER, 3, R.string.operation_create_folder,
-                R.drawable.ic_menu_new_folder);
-        addMenuItem(menu, GlobalConsts.MENU_FAVORITE, 4, R.string.operation_favorite,
-                R.drawable.ic_menu_delete_favorite);
-        addMenuItem(menu, GlobalConsts.MENU_SHOWHIDE, 5, R.string.operation_show_sys,
-                R.drawable.ic_menu_show_sys);
+        addMenuItem(menu, GlobalConsts.MENU_NEW_FOLDER, 3,
+                R.string.operation_create_folder, R.drawable.ic_menu_new_folder);
+        addMenuItem(menu, GlobalConsts.MENU_FAVORITE, 4,
+                R.string.operation_favorite, R.drawable.ic_menu_delete_favorite);
+        addMenuItem(menu, GlobalConsts.MENU_SHOWHIDE, 5,
+                R.string.operation_show_sys, R.drawable.ic_menu_show_sys);
         addMenuItem(menu, MENU_REFRESH, 6, R.string.operation_refresh,
                 R.drawable.ic_menu_refresh);
-        addMenuItem(menu, MENU_SETTING, 7, R.string.menu_setting, drawable.ic_menu_preferences);
-        addMenuItem(menu, MENU_EXIT, 8, R.string.menu_exit, drawable.ic_menu_close_clear_cancel);
+        addMenuItem(menu, MENU_SETTING, 7, R.string.menu_setting,
+                drawable.ic_menu_preferences);
+        addMenuItem(menu, MENU_EXIT, 8, R.string.menu_exit,
+                drawable.ic_menu_close_clear_cancel);
         return true;
     }
 
@@ -890,9 +975,11 @@ public class FileViewInteractionHub implements IOperationProgressListener {
         addMenuItem(menu, itemId, order, string, -1);
     }
 
-    private void addMenuItem(Menu menu, int itemId, int order, int string, int iconRes) {
+    private void addMenuItem(Menu menu, int itemId, int order, int string,
+            int iconRes) {
         if (!mFileViewListener.shouldHideMenu(itemId)) {
-            MenuItem item = menu.add(0, itemId, order, string).setOnMenuItemClickListener(menuItemClick);
+            MenuItem item = menu.add(0, itemId, order, string)
+                    .setOnMenuItemClickListener(menuItemClick);
             if (iconRes > 0) {
                 item.setIcon(iconRes);
             }
@@ -906,7 +993,8 @@ public class FileViewInteractionHub implements IOperationProgressListener {
 
     private void updateMenuItems(Menu menu) {
         menu.findItem(MENU_SELECTALL).setTitle(
-                isSelectedAll() ? R.string.operation_cancel_selectall : R.string.operation_selectall);
+                isSelectedAll() ? R.string.operation_cancel_selectall
+                        : R.string.operation_selectall);
         menu.findItem(MENU_SELECTALL).setEnabled(mCurrentMode != Mode.Pick);
 
         MenuItem menuItem = menu.findItem(GlobalConsts.MENU_SHOWHIDE);
@@ -915,7 +1003,8 @@ public class FileViewInteractionHub implements IOperationProgressListener {
                     : R.string.operation_show_sys);
         }
 
-        FavoriteDatabaseHelper databaseHelper = FavoriteDatabaseHelper.getInstance();
+        FavoriteDatabaseHelper databaseHelper = FavoriteDatabaseHelper
+                .getInstance();
         if (databaseHelper != null) {
             MenuItem item = menu.findItem(GlobalConsts.MENU_FAVORITE);
             if (item != null) {
@@ -938,7 +1027,8 @@ public class FileViewInteractionHub implements IOperationProgressListener {
         return mCurrentMode;
     }
 
-    public void onListItemClick(AdapterView<?> parent, View view, int position, long id) {
+    public void onListItemClick(AdapterView<?> parent, View view, int position,
+            long id) {
         FileInfo lFileInfo = mFileViewListener.getItem(position);
         showDropdownNavigation(false);
 
@@ -949,8 +1039,10 @@ public class FileViewInteractionHub implements IOperationProgressListener {
 
         if (isInSelection()) {
             boolean selected = lFileInfo.Selected;
-            ActionMode actionMode = ((FileExplorerTabActivity) mContext).getActionMode();
-            ImageView checkBox = (ImageView) view.findViewById(R.id.file_checkbox);
+            ActionMode actionMode = ((FileExplorerTabActivity) mContext)
+                    .getActionMode();
+            ImageView checkBox = (ImageView) view
+                    .findViewById(R.id.file_checkbox);
             if (selected) {
                 mCheckedFileNameList.remove(lFileInfo);
                 checkBox.setImageResource(R.drawable.btn_check_off_holo_light);
@@ -959,12 +1051,15 @@ public class FileViewInteractionHub implements IOperationProgressListener {
                 checkBox.setImageResource(R.drawable.btn_check_on_holo_light);
             }
             if (actionMode != null) {
-                if (mCheckedFileNameList.size() == 0) actionMode.finish();
-                else actionMode.invalidate();
+                if (mCheckedFileNameList.size() == 0)
+                    actionMode.finish();
+                else
+                    actionMode.invalidate();
             }
             lFileInfo.Selected = !selected;
 
-            Util.updateActionModeTitle(actionMode, mContext, mCheckedFileNameList.size());
+            Util.updateActionModeTitle(actionMode, mContext,
+                    mCheckedFileNameList.size());
             return;
         }
 
@@ -977,12 +1072,12 @@ public class FileViewInteractionHub implements IOperationProgressListener {
             return;
         }
 
-        mCurrentPath = getAbsoluteName(mCurrentPath, lFileInfo.fileName);
-        ActionMode actionMode = ((FileExplorerTabActivity) mContext).getActionMode();
+        jump2Folder(getAbsoluteName(mCurrentPath, lFileInfo.fileName));
+        ActionMode actionMode = ((FileExplorerTabActivity) mContext)
+                .getActionMode();
         if (actionMode != null) {
             actionMode.finish();
         }
-        refreshFileList();
     }
 
     public void setRootPath(String path) {
@@ -1003,7 +1098,8 @@ public class FileViewInteractionHub implements IOperationProgressListener {
     }
 
     private String getAbsoluteName(String path, String name) {
-        return path.equals(GlobalConsts.ROOT_PATH) ? path + name : path + File.separator + name;
+        return path.equals(GlobalConsts.ROOT_PATH) ? path + name : path
+                + File.separator + name;
     }
 
     // check or uncheck
@@ -1011,7 +1107,7 @@ public class FileViewInteractionHub implements IOperationProgressListener {
         if (isMoveState())
             return false;
 
-        if(isSelectingFiles() && f.IsDir)
+        if (isSelectingFiles() && f.IsDir)
             return false;
 
         if (f.Selected) {
@@ -1027,9 +1123,11 @@ public class FileViewInteractionHub implements IOperationProgressListener {
     }
 
     public boolean isSelectedAll() {
-        return mFileViewListener.getItemCount() != 0 && mCheckedFileNameList.size() == mFileViewListener.getItemCount();
+        return mFileViewListener.getItemCount() != 0
+                && mCheckedFileNameList.size() == mFileViewListener
+                        .getItemCount();
     }
-    
+
     public boolean isSelected() {
         return mCheckedFileNameList.size() != 0;
     }
@@ -1060,7 +1158,7 @@ public class FileViewInteractionHub implements IOperationProgressListener {
             mDropdownNavigation.setVisibility(View.GONE);
         } else if (isInSelection()) {
             clearSelection();
-        } else if (!onOperationUpLevel()) {
+        } else if (!onOperationUpLevel(true)) {
             return false;
         }
         return true;
@@ -1080,9 +1178,9 @@ public class FileViewInteractionHub implements IOperationProgressListener {
 
     private void showDropdownNavigation(boolean show) {
         mDropdownNavigation.setVisibility(show ? View.VISIBLE : View.GONE);
-        mNavigationBarUpDownArrow
-                .setImageResource(mDropdownNavigation.getVisibility() == View.VISIBLE ? R.drawable.arrow_up
-                        : R.drawable.arrow_down);
+        mNavigationBarUpDownArrow.setImageResource(mDropdownNavigation
+                .getVisibility() == View.VISIBLE ? R.drawable.arrow_up
+                : R.drawable.arrow_down);
     }
 
     @Override
