@@ -432,7 +432,7 @@ public class FileViewActivity extends Fragment implements
     }
 
     public boolean setPath(String location) {
-        if (!location.startsWith(mFileViewInteractionHub.getRootPath())) {
+        if (null == location || !location.startsWith(mFileViewInteractionHub.getRootPath())) {
             return false;
         }
         mFileViewInteractionHub.setCurrentPath(location);
