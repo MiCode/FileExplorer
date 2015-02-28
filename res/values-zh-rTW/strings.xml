@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+        <string name="app_name">文件管理</string>
+        <string name="confirm">確定</string>
+        <string name="menu_item_search">搜索</string>
+        <string name="operation_create_folder">新建資料夾</string>
+        <string name="menu_item_sort">排序</string>
+        <string name="menu_item_sort_name">名稱</string>
+        <string name="menu_item_sort_size">大小</string>
+        <string name="menu_item_sort_date">時間</string>
+        <string name="menu_item_sort_type">類型</string>
+        <string name="operation_favorite">加到我的最愛</string>
+        <string name="operation_unfavorite">從我的最愛移除</string>
+        <string name="operation_copy">複製</string>
+        <string name="operation_copy_path">複製路徑</string>
+        <string name="operation_paste">貼上</string>
+        <string name="operation_move">移動</string>
+        <string name="operation_send">傳送</string>
+        <string name="operation_rename">重新命名</string>
+        <string name="operation_delete">刪除</string>
+        <string name="operation_info">詳情</string>
+        <string name="operation_cancel">取消</string>
+        <string name="operation_refresh">重新整理</string>
+        <string name="operation_selectall">全選</string>
+        <string name="operation_cancel_selectall">取消全選</string>
+        <string name="operation_show_sys">顯示點文件和隱藏文件</string>
+        <string name="operation_hide_sys">隱藏點文件和隱藏文件</string>
+        <string name="cancel">取消</string>
+        <string name="no_file">沒有文件</string>
+        <string name="tab_category">分類瀏覽</string>
+        <string name="tab_sd">文件管理</string>
+        <string name="tab_remote">遠端管理</string>
+        <string name="sd_folder">SD卡</string>
+        <string name="category_all">所有</string>
+        <string name="category_music">音樂</string>
+        <string name="category_video">影片</string>
+        <string name="category_picture">圖片</string>
+        <string name="category_theme">主題</string>
+        <string name="category_document">文件</string>
+        <string name="category_zip">壓縮包</string>
+        <string name="category_apk">安裝包</string>
+        <string name="category_other">其它</string>
+        <string name="category_favorite">我的最愛</string>
+        <string name="operation_rename_message">請輸入新名稱</string>
+        <string name="operation_create_folder_message">請輸入資料夾名稱</string>
+        <string name="operation_delete_confirm_message">確認刪除?</string>
+        <string name="new_folder_name">新建資料夾</string>
+        <string name="sd_card_size">SD卡:<xliff:g id="total_size">%1$s</xliff:g></string>
+        <string name="sd_card_available">可用:<xliff:g id="available_size">%1$s</xliff:g></string>
+        <string name="file_info_location">位置:</string>
+        <string name="file_info_size">大小:</string>
+        <string name="file_info_modified">時間:</string>
+        <string name="file_info_canread">可讀:</string>
+        <string name="file_info_canwrite">可寫:</string>
+        <string name="file_info_ishidden">隱藏:</string>
+        <string name="yes">是</string>
+        <string name="no">否</string>
+        <string name="operation_deleting">正在刪除...</string>
+        <string name="operation_pasting">正在復制...</string>
+        <string name="operation_moving">正在移動...</string>
+        <string name="confirm_know">知道了</string>
+        <string name="install_successful">安裝成功</string>
+        <string name="install_failed">安裝失敗</string>
+        <string name="error_info_cant_send_folder">不能發送資料夾</string>
+        <string name="added_favorite">已加入我的最愛</string>
+        <string name="removed_favorite">已從我的最愛移除</string>
+        <string name="fail_to_create_folder">創建資料夾失敗，資料夾已存在。 </string>
+        <string name="fail_to_rename">重新命名失敗失敗，可能使用該名稱的文件或資料夾已存在。 </string>
+        <string name="enable_sd_card">無可用SD卡，請插入或連接SD卡</string>
+        <string name="start_server">啟動服務</string>
+        <string name="stop_server">停止服務</string>
+        <string name="notif_server_starting">遠端管理服務已啟動</string>
+        <string name="notif_title">遠端管理服務正在運行</string>
+        <string name="storage_warning">外部存儲不可用.</string>
+        <string name="wifi_state">WiFi狀態</string>
+        <string name="instruction_pre">啟動後可以從電腦端遠端管理手機文件</string>
+        <string name="instruction">請在“我的電腦”地址欄中輸入：</string>
+        <string name="no_wifi">無WiFi網絡</string>
+        <string name="no_wifi_hint">無WiFi網絡,點擊以查看WiFi設置</string>
+        <string name="search_title">搜索文件</string>
+        <string name="search_hint">輸入部分或全部文件名</string>
+        <string name="file_size">%d 字節</string>
+        <string name="dialog_select_type">選擇文件類型</string>
+        <string name="dialog_type_text">文字檔</string>
+        <string name="dialog_type_audio">音訊</string>
+        <string name="dialog_type_video">視訊</string>
+        <string name="dialog_type_image">圖像</string>
+        <string name="favorite_photo">照片</string>
+        <string name="favorite_sdcard">SD卡</string>
+        <string name="favorite_root">根目錄</string>
+        <string name="favorite_screen_cap">MIUI截屏</string>
+        <string name="favorite_ringtone">鈴聲</string>
+        <string name="multi_select_title">已選擇<xliff:g id="number">%1$s</xliff:g> 個</string>
+        <string name="menu_setting">設定</string>
+        <string name="menu_exit">結束</string>
+        <string name="preference_title">一般設定</string>
+        <string name="pref_primary_folder">主頁資料夾</string>
+        <string name="pref_read_root">讀取根目錄</string>
+        <string name="pref_show_real_path">顯示真實路徑</string>
+        <string name="pref_primary_folder_summary">程序啟動時顯示的資料夾，當前路徑為<xliff:g id="string">%1$s</xliff:g></string>
+        <string name="pref_show_real_path_summary">在導航欄中顯示真實路徑</string>
+
+</resources>
