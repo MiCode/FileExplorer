@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <string name="added_favorite">Toegevoegt aan favorieten</string>
+    <string name="app_name">File Explorer</string>
+    <string name="cancel">Annuleren</string>
+    <string name="category_all">Alles</string>
+    <string name="category_apk">APKs</string>
+    <string name="category_document">Docs</string>
+    <string name="category_favorite">Favorieten</string>
+    <string name="category_music">Muziek</string>
+    <string name="category_other">Overig</string>
+    <string name="category_picture">Foto's</string>
+    <string name="category_theme">Thema's</string>
+    <string name="category_video">Videos</string>
+    <string name="category_zip">Zips</string>
+    <string name="confirm">Oké</string>
+    <string name="confirm_know">Oké</string>
+    <string name="enable_sd_card">SD kaart is niet beschikbaar. Plug er een in.</string>
+    <string name="error_info_cant_send_folder">Fout met verzenden van map</string>
+    <string name="fail_to_create_folder">Fout met aanmaken van map, map bestaat al.</string>
+    <string name="fail_to_rename">Fout met wijzigen naam, bestand of map bestaat al.</string>
+    <string name="file_info_canread">Leesbaar:</string>
+    <string name="file_info_canwrite">Schrijfbaar:</string>
+    <string name="file_info_ishidden">Verborgen:</string>
+    <string name="file_info_location">Pad:</string>
+    <string name="file_info_modified">Aangepast:</string>
+    <string name="file_info_size">Groten:</string>
+    <string name="file_size">%d Bytes</string>
+    <string name="install_failed">Installatie mislukt</string>
+    <string name="install_successful">Installatie succesvol</string>
+    <string name="instruction">Voer het volgende adres in op uw FTP Client:</string>
+    <string name="instruction_pre">Start service om FTP server te activeren</string>
+    <string name="menu_item_search">Zoek</string>
+    <string name="menu_item_sort">Sorteer op</string>
+    <string name="menu_item_sort_date">Datum</string>
+    <string name="menu_item_sort_name">Naam</string>
+    <string name="menu_item_sort_size">Grote</string>
+    <string name="menu_item_sort_type">Type</string>
+    <string name="new_folder_name">Nieuwe map</string>
+    <string name="no">Nee</string>
+    <string name="no_file">Geen bestand</string>
+    <string name="no_wifi">Geen Wi-Fi netwerk</string>
+    <string name="no_wifi_hint">Geen Wi-Fi network, druk om instellingen te openen.</string>
+    <string name="notif_server_starting">FTP Server gestart.</string>
+    <string name="notif_title">FTP Server</string>
+    <string name="operation_cancel">Annuleren</string>
+    <string name="operation_cancel_selectall">Deselecteer Alles</string>
+    <string name="operation_copy">Kopieër</string>
+    <string name="operation_copy_path">Kopieër bestands pad</string>
+    <string name="operation_create_folder">Nieuwe map</string>
+    <string name="operation_create_folder_message">Voer map naam in</string>
+    <string name="operation_delete">Verwijder</string>
+    <string name="operation_delete_confirm_message">Zeker weten?</string>
+    <string name="operation_deleting">Verwijderen...</string>
+    <string name="operation_favorite">Voeg toe aan favorieten</string>
+    <string name="operation_hide_sys">Verberg verborgen bestanden</string>
+    <string name="operation_info">Details</string>
+    <string name="operation_move">Verplaats</string>
+    <string name="operation_moving">Verplaatsen...</string>
+    <string name="operation_paste">Plak</string>
+    <string name="operation_pasting">Plakken...</string>
+    <string name="operation_refresh">Vernieuw</string>
+    <string name="operation_rename">Hernoem</string>
+    <string name="operation_rename_message">Voer een nieuwe naam in</string>
+    <string name="operation_selectall">Selecteer Alles</string>
+    <string name="operation_send">Stuur</string>
+    <string name="operation_show_sys">Weergeef verborgen bestanden</string>
+    <string name="operation_unfavorite">Verwijder van Favorieten</string>
+    <string name="removed_favorite">Verwijderd van Favorieten</string>
+    <string name="sd_card_available">Ruimte beschikbaar:<xliff:g id="available_size">%1$s</xliff:g></string>
+    <string name="sd_card_size">SD kaart:<xliff:g id="total_size">%1$s</xliff:g></string>
+    <string name="sd_folder">SD kaart</string>
+    <string name="search_hint">Zoek bestanden</string>
+    <string name="search_title">Zoek bestanden</string>
+    <string name="start_server">Start Service</string>
+    <string name="stop_server">Stop Service</string>
+    <string name="storage_warning">Externe storage is niet beschikbaar of kon niet worden gelezen.</string>
+    <string name="tab_category">Browse</string>
+    <string name="tab_remote">FTP</string>
+    <string name="tab_sd">Bestand</string>
+    <string name="wifi_state">WLAN Status</string>
+    <string name="yes">Ja</string>
+    <string name="dialog_select_type">Selecteer bestands type</string>
+    <string name="dialog_type_text">Text</string>
+    <string name="dialog_type_audio">Audio</string>
+    <string name="dialog_type_video">Video</string>
+    <string name="dialog_type_image">Foto</string>
+    <string name="favorite_photo">Foto</string>
+    <string name="favorite_sdcard">SD Kaart</string>
+    <string name="favourite_root">Root</string><string name="favorite_screen_cap">MIUI Screen Shot</string>
+    <string name="favorite_ringtone">Ringtone</string>
+    <string name="multi_select_title"><xliff:g id="number">%1$s</xliff:g> geselecteerde item(s)</string>
+    <string name="menu_setting">Instellingen</string>
+    <string name="menu_exit">Sluiten</string>
+    <string name="preference_title">Generieke instellingen</string>
+    <string name="pref_primary_folder">Thuis map</string>
+    <string name="pref_read_root">Lees root</string>
+    <string name="pref_show_real_path">Weergeef echte pad</string>
+    <string name="default_primary_folder">/mnt/sdcard</string>
+    <string name="pref_primary_folder_summary">De map die verschijnt wanneer de app start, en de huidige waarde is <xliff:g id="string">%1$s</xliff:g></string>
+    <string name="pref_show_real_path_summary">Toon echte pad in de navigatiebalk</string>
+
+</resources>
