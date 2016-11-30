@@ -42,6 +42,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -88,7 +89,8 @@ public class ServerControlActivity extends Fragment implements IBackPressedListe
 
     public ServerControlActivity() {
     }
-
+    
+    private ImageView setWiFiImageView;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mActivity = getActivity();
@@ -109,7 +111,9 @@ public class ServerControlActivity extends Fragment implements IBackPressedListe
         instructionTextPre = (TextView) mRootView.findViewById(R.id.instruction_pre);
         startStopButton = mRootView.findViewById(R.id.start_stop_button);
         startStopButton.setOnClickListener(startStopListener);
-
+        setWiFiImageView = (ImageView)mRootView.findViewById(R.id.wifi_state_image);
+        setWiFiImageView.setOnClickListener(wifiSetListener);
+        
         updateUi();
         UiUpdater.registerClient(handler);
         
@@ -264,7 +268,14 @@ public class ServerControlActivity extends Fragment implements IBackPressedListe
             }
         }
     };
-
+    OnClickListener wifiSetListener=new OnClickListener() {
+		
+		@Override
+		public void onClick(View v) {
+			Intent intent=new Intent(Settings.ACTION_WIFI_SETTINGS);
+			startActivity(intent);
+		}
+	};
     private void warnIfNoExternalStorage() {
         String storageState = Environment.getExternalStorageState();
         if (!storageState.equals(Environment.MEDIA_MOUNTED)) {
